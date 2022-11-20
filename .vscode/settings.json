@@ -1,0 +1,30 @@
+{
+    "cSpell.enableFiletypes": [
+        "bat",
+        "dockerfile",
+        "lua",
+        "makefile",
+        "powershell"
+    ],
+    "cSpell.words": [
+        "bochs",
+        "bootsector",
+        "CCFLAGS",
+        "CFLAGS",
+        "Cygwin",
+        "ffreestanding",
+        "IDIR",
+        "ifeq",
+        "ifneq",
+        "maxrem",
+        "nasm",
+        "ndisasm",
+        "objcopy",
+        "oformat",
+        "pcspk",
+        "soundhw",
+        "Ttext",
+        "vidmem",
+        "Wextra"
+    ]
+}
