@@ -10,6 +10,7 @@
         "bochs",
         "bootsector",
         "CCFLAGS",
+        "cdest",
         "CFLAGS",
         "Cygwin",
         "ffreestanding",
@@ -19,12 +20,17 @@
         "maxrem",
         "nasm",
         "ndisasm",
+        "nmemcpy",
         "objcopy",
         "oformat",
         "pcspk",
         "soundhw",
+        "STRALIGN",
         "Ttext",
         "vidmem",
         "Wextra"
-    ]
+    ],
+    "files.associations": {
+        "stdio.h": "c"
+    }
 }

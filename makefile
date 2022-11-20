@@ -17,7 +17,8 @@ HEADERS = $(wildcard src/kernel/*.h src/drivers/*.h)
 OBJ = ${C_SOURCES:.c=.o}
 # Default build target
 
-
+all : os-image
+# Run bochs to simulate booting of our code .
 
 qemu_env : create_qemu_dir
 #Create Virtual HDD with 5GB of storage
@@ -29,9 +30,7 @@ create_qemu_dir : wipe
 wipe :
 	@if exist qemu rmdir /s /q qemu
 
-all : os-image
-# Run bochs to simulate booting of our code .
-run : all
+run :
 #Open qemu emulator with 4GB of RAM
 	@qemu-system-i386 -m 1M -drive file=qemu/HDD.img,index=0,media=disk,format=raw -drive file=images/os-image.img,index=0,if=floppy,format=raw -soundhw hda
 

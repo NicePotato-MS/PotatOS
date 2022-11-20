@@ -3,6 +3,17 @@
 #include <stdint.h>
 #include <conio.h>
 
+void nmemcpy(void *dest, void *src, uint16_t n)
+{
+// Typecast src and dest addresses to (char *)
+char *csrc = (char *)src;
+char *cdest = (char *)dest;
+ 
+// Copy contents of src[] to dest[]
+for (int i=0; i<n; i++)
+    cdest[i] = csrc[i];
+}
+
 static inline void outb(uint16_t port, uint8_t val)
 {
     asm ( "outb %0, %1" : : "a"(val), "Nd"(port) );
