@@ -1,17 +1,6 @@
-#include <stdio.h>
 #include <stdint.h>
-#include <string.h>
 #include <conio.h>
 #include "lowlevel.h"
-
-# define VIDEO_ADDRESS (unsigned char*) 0xb8000
-# define MAX_ROWS 25
-# define MAX_COLS 80
-// Attribute byte for our default colour scheme .
-# define WHITE_ON_BLACK 0x0f
-// Screen device I/O ports
-# define REG_SCREEN_CTRL 0x3D4
-# define REG_SCREEN_DATA 0x3D5
 
 // Assign variables
 
@@ -76,7 +65,7 @@ void set_cursor_pos(int x, int y) {
 /* Scroll screen up by scroll amount */
 void scroll_screen(uint16_t scroll_amount) {
     //Error checking to avoid memory leaks
-    //Check if scroll amount is greater than MAX_ROWS negative or positive
+    //Check if scroll amount is greater than MAX_ROWS
     if(scroll_amount>MAX_ROWS) {
         scroll_amount = MAX_ROWS;
     }
