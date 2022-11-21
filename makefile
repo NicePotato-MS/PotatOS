@@ -32,7 +32,7 @@ wipe :
 
 run :
 #Open qemu emulator with 4GB of RAM
-	@qemu-system-i386 -m 1M -drive file=qemu/HDD.img,index=0,media=disk,format=raw -drive file=images/os-image.img,index=0,if=floppy,format=raw -soundhw hda
+	@qemu-system-i386 -m 1M -drive file=qemu/HDD.img,index=0,media=disk,format=raw -drive file=images/os-image.img,index=0,if=floppy,format=raw -device intel-hda -device hda-duplex
 
 # This is the actual disk image that the computer loads
 # which is the combination of our compiled bootsector and kernel
