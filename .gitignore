@@ -1,0 +1,4 @@
+*.iso
+*.img
+isodir
+sysroot

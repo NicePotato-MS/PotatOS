@@ -1,0 +1,40 @@
+{
+    "cSpell.enableFiletypes": [
+        "bat",
+        "dockerfile",
+        "lua",
+        "makefile",
+        "powershell"
+    ],
+    "cSpell.words": [
+        "bochs",
+        "bootsector",
+        "CCFLAGS",
+        "cdest",
+        "CFLAGS",
+        "Cygwin",
+        "ffreestanding",
+        "IDIR",
+        "ifeq",
+        "ifneq",
+        "maxrem",
+        "nasm",
+        "ndisasm",
+        "nmemcpy",
+        "nstrlen",
+        "objcopy",
+        "oformat",
+        "pcspk",
+        "PotatOS",
+        "soundhw",
+        "STRALIGN",
+        "Ttext",
+        "vidmem",
+        "Wextra"
+    ],
+    "files.associations": {
+        "stdio.h": "c",
+        "stdint.h": "c"
+    },
+    "C_Cpp.default.compilerPath": "/pgcc/bin/i686-elf-gcc"
+}
