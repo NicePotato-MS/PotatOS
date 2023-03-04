@@ -4,12 +4,8 @@ PROJECTS="libc kernel"
 export MAKE=${MAKE:-make}
 export HOST=${HOST:-$(./default-host.sh)}
 
-# lazy method of ridding (most of) the garbage before sysroot by using a folder in root called "proot"
-# make sure to run as su!
-# change this to the path to your gcc or whatever
-mkdir -p /proot/
-export SUINC=/home/micah/opt/cross/bin
-# if you know how to modify that junk before sysroot, please lmk!
+#change this to the path to your gcc or whatever
+export SUINC=/pgcc/bin
 
 export AR=${SUINC}/${HOST}-ar
 export AS=${SUINC}/${HOST}-as
