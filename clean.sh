@@ -1,4 +1,5 @@
 #!/bin/sh
+# useless addition
 set -e
 . ./config.sh
 
