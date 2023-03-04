@@ -36,5 +36,9 @@
         "stdio.h": "c",
         "stdint.h": "c"
     },
-    "C_Cpp.default.compilerPath": "/pgcc/bin/i686-elf-gcc"
+    "C_Cpp.default.compilerPath": "/pgcc/bin/i686-elf-gcc",
+    "C_Cpp.default.includePath": [
+        "/pgcc/include",
+        "/proot/libc/include"
+    ]
 }
