@@ -11,7 +11,8 @@
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "/pgcc/bin/i686-elf-gcc"
+            "compilerPath": "/pgcc/bin/i686-elf-gcc",
+            "configurationProvider": "ms-vscode.makefile-tools"
         }
     ],
     "version": 4
