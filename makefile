@@ -6,7 +6,7 @@ create_qemu_dir : wipe
 	@mkdir qemu
 
 wipe :
-	@if exist qemu rmdir /s /q qemu
+	@rm -rf qemu
 
 run :
 #Open qemu emulator with 4GB of RAM
