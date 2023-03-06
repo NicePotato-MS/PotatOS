@@ -1,4 +1,4 @@
-![](/pictures-art/boxart.png)
+<img src="https://raw.githubusercontent.com/NicePotato-MS/PotatOS/main/pictures-art/boxart.png" width="250" height="250" />
 
 > Please note, above qr code is broken
 
