@@ -1,4 +1,7 @@
-![Boxart](https://raw.githubusercontent.com/NicePotato-MS/PotatOS/main/pictures-art/boxart.png)
+![Boxart](/pictures-art/boxart.png =250x250)
+
+> Please note, above qr code is broken
+
 # PotatOS (Potato OS)
 ## Potato Operating System for Potato Computers
 ## Custom operating system made in C
