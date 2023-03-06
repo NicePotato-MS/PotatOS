@@ -34,11 +34,14 @@
     ],
     "files.associations": {
         "stdio.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "tty.h": "c",
+        "stddef.h": "c"
     },
     "C_Cpp.default.compilerPath": "/pgcc/bin/i686-elf-gcc",
     "C_Cpp.default.includePath": [
         "/pgcc/include",
-        "/proot/libc/include"
+        "/proot/libc/include",
+        "/proot/kernel/include"
     ]
 }

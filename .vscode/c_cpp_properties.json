@@ -4,7 +4,8 @@
             "name": "Win32",
             "includePath": [
                 "/pgcc/include",
-                "/proot/libc/include"
+                "/proot/libc/include",
+                "/proot/kernel/include"
             ],
             "defines": [
                 "_DEBUG",

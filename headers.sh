@@ -1,6 +1,7 @@
 #!/bin/sh
 set -e
 . ./config.sh
+echo ---BUILDING HEADERS---
 
 mkdir -p "$SYSROOT"
 

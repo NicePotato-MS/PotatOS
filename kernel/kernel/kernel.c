@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <lowlevel.h>
 
 #include <kernel/tty.h>
 

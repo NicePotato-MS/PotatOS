@@ -1,6 +1,7 @@
 #!/bin/sh
 # useless addition
 set -e
+echo ---CLEANING---
 . ./config.sh
 
 for PROJECT in $PROJECTS; do

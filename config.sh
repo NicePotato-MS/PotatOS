@@ -21,7 +21,7 @@ export CFLAGS='-O2 -g'
 export CPPFLAGS=''
  
 # Configure the cross-compiler to use the desired system root.
-export SYSROOT="/proot/sysroot"
+export SYSROOT="$(pwd)/sysroot"
 export CC="$CC --sysroot=$SYSROOT"
  
 # Work around that the -elf gcc targets doesn't have a system include directory
