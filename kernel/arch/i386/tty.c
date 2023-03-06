@@ -18,7 +18,7 @@ static size_t terminal_column;
 static uint8_t terminal_color;
 static uint16_t* terminal_buffer;
 
-void terminal_set_cursor_position(int x, int y)
+void terminal_set_cursor_position(uint16_t x, uint16_t y)
 {
 	uint16_t pos = y * VGA_WIDTH + x;
 	terminal_column = x;
@@ -40,13 +40,10 @@ uint16_t terminal_get_cursor_position(void)
     return pos;
 }
 
-void terminal_enable_cursor(uint8_t cursor_start, uint8_t cursor_end)
+void terminal_enable_cursor(void)
 {
 	outb(0x3D4, 0x0A);
-	outb(0x3D5, (inb(0x3D5) & 0xC0) | cursor_start);
- 
 	outb(0x3D4, 0x0B);
-	outb(0x3D5, (inb(0x3D5) & 0xE0) | cursor_end);
 	terminal_cursor_enabled = true;
 }
 
