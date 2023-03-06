@@ -1,3 +1,4 @@
+![Boxart](https://raw.githubusercontent.com/NicePotato-MS/PotatOS/main/pictures-art/boxart.png)
 # PotatOS (Potato OS)
 ## Potato Operating System for Potato Computers
 ## Custom operating system made in C
