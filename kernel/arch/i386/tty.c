@@ -65,10 +65,10 @@ void increment_row(uint8_t inc_amount) {
 }
 
 void terminal_initialize(void) {
-	terminal_row = 0;
-	terminal_column = 0;
 	terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
 	terminal_buffer = VGA_MEMORY;
+	terminal_enable_cursor();
+	terminal_set_cursor_position(0,0);
 	for (size_t y = 0; y < VGA_HEIGHT; y++) {
 		for (size_t x = 0; x < VGA_WIDTH; x++) {
 			const size_t index = y * VGA_WIDTH + x;
