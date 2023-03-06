@@ -1,4 +1,4 @@
-![Boxart](/pictures-art/boxart.png =250x250)
+![](/pictures-art/boxart.png)
 
 > Please note, above qr code is broken
 
