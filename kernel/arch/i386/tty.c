@@ -47,14 +47,18 @@ void terminal_enable_cursor(void)
 	terminal_cursor_enabled = true;
 }
 
-void terminal_disable_cursor()
+void terminal_disable_cursor(void)
 {
 	outb(0x3D4, 0x0A);
 	outb(0x3D5, 0x20);
 	terminal_cursor_enabled = false;
 }
 
-void increment_row(uint8_t inc_amount) {
+void terminal_shift_screen(int8_t shift) { // Positive values moves up, negative moves down
+
+}
+
+void terminal_increment_row(uint8_t inc_amount) {
 	if (++terminal_row == VGA_HEIGHT)
 		terminal_row = 0;
 	if (terminal_cursor_enabled == true)
@@ -80,14 +84,14 @@ void terminal_setcolor(uint8_t color) {
 
 void terminal_putentryat(unsigned char c, uint8_t color, size_t x, size_t y) {
 	const size_t index = y * VGA_WIDTH + x;
-	if (c == '\n') {
+	if (c == '\n') { // Check if current character is a newline
 		terminal_column = 0;
-		increment_row(1);
+		terminal_increment_row(1);
 	} else {
 		terminal_buffer[index] = vga_entry(c, color);
 		if (++terminal_column == VGA_WIDTH) {
 			terminal_column = 0;
-			increment_row(1);
+			terminal_increment_row(1);
 		}
 	}
 }

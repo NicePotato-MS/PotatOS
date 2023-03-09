@@ -1,7 +1,7 @@
 {
     "configurations": [
         {
-            "name": "Win32",
+            "name": "PotatOS",
             "includePath": [
                 "/pgcc/include",
                 "/proot/libc/include",
@@ -13,7 +13,12 @@
                 "_UNICODE"
             ],
             "compilerPath": "/pgcc/bin/i686-elf-gcc",
-            "configurationProvider": "ms-vscode.makefile-tools"
+            "configurationProvider": "ms-vscode.makefile-tools",
+            "compilerArgs": [
+                "-ffreestanding",
+                "-Wall",
+                "-Wextra"
+            ]
         }
     ],
     "version": 4
