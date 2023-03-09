@@ -38,10 +38,11 @@
         "tty.h": "c",
         "stddef.h": "c"
     },
-    "C_Cpp.default.compilerPath": "/pgcc/bin/i686-elf-gcc",
+    "C_Cpp.default.compilerPath": "",
     "C_Cpp.default.includePath": [
         "/pgcc/include",
         "/proot/libc/include",
         "/proot/kernel/include"
-    ]
+    ],
+    "C_Cpp.legacyCompilerArgsBehavior": false
 }

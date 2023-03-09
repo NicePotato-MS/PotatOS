@@ -1,0 +1,9 @@
+limine
+ovmf-x64
+kernel/limine.h
+*.elf
+*.iso
+*.hdd
+*.img
+*.o
+*.d
