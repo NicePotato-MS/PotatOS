@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/NicePotato-MS/PotatOS/main/pictures-art/boxart.png" width="300" height="300" />
+<img src="https://raw.githubusercontent.com/NicePotato-MS/PotatOS/main/pictures-art/potatos-boxart.svg" width="500" height="500" />
 
 > Please note, above qr code is broken
 
