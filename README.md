@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/NicePotato-MS/PotatOS/main/pictures-art/potatos-boxart.svg" width="500" height="500" />
 
-> Please note, above qr code is broken
+> Please note, above qr code links back here
 
 # PotatOS (Potato OS)
 Potato Operating System for Potato Computers
