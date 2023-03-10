@@ -40,9 +40,8 @@
     },
     "C_Cpp.default.compilerPath": "",
     "C_Cpp.default.includePath": [
-        "/pgcc/include",
-        "/proot/libc/include",
-        "/proot/kernel/include"
+        "/proot/headers/include"
     ],
-    "C_Cpp.legacyCompilerArgsBehavior": false
+    "C_Cpp.legacyCompilerArgsBehavior": false,
+    "C_Cpp.errorSquiggles": "enabledIfIncludesResolve"
 }

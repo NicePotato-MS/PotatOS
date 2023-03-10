@@ -40,17 +40,16 @@ limine:
 	$(MAKE) -C limine
 
 .PHONY: kernel
-kernel:
+kernel: headers
 	$(MAKE) -C kernel
-
 .PHONY: headers
 headers:
-	$(MAKE) -C headers
-
-$(OSIDENTIF).iso: limine kernel
-# Make sure no failed iso_root exists
 	rm -rf iso_root
 	mkdir -p iso_root
+# Compile headers and install them to our kernel
+	$(MAKE) -C headers install
+
+$(OSIDENTIF).iso: limine kernel
 # Copy these files into the root of the ISO
 # - Kernel executable
 # - Limine config
@@ -65,8 +64,10 @@ $(OSIDENTIF).iso: limine kernel
 		iso_root -o $(OSIDENTIF).iso
 # Inject the limine bootloader into the ISO
 	limine/limine-deploy $(OSIDENTIF).iso
+# Clean up header compilation
+	$(MAKE) -C headers clean
 # Remove the iso_root as the ISO has been created
-	rm -rf iso_root
+#rm -rf iso_root
 
 .PHONY: clean
 clean:

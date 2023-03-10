@@ -4,14 +4,15 @@
             "name": "PotatOS",
             "includePath": [
                 "/proot/limine",
-                "/proot/kernel"
+                "/proot/kernel",
+                "/proot/headers/include"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "",
+            "compilerPath": "/usr/bin/cc",
             "configurationProvider": "ms-vscode.makefile-tools",
             "compilerArgs": [
                 "-std=gnu11",
