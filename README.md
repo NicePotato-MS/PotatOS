@@ -1,6 +1,6 @@
-<img src="https://raw.githubusercontent.com/NicePotato-MS/PotatOS/main/pictures-art/boxart.png" width="300" height="300" />
+<img src="https://raw.githubusercontent.com/NicePotato-MS/PotatOS/main/pictures-art/potatos-boxart.svg" width="500" height="500" />
 
-> Please note, above qr code is broken
+> Please note, above qr code links back here
 
 # PotatOS (Potato OS)
 Potato Operating System for Potato Computers
@@ -8,12 +8,17 @@ Potato Operating System for Potato Computers
 
 ### Overview
 
-- Uses the limine bootloader. PotatOS derived from limine barebones https://github.com/limine-bootloader/limine-barebones
+- Uses the limine bootloader. PotatOS derived from [limine barebones](https://github.com/limine-bootloader/limine-barebones)
 - Runs on x86_64/AMD64 processors
 
 ### Features
 
-- PC speaker support
+- [x] - Added
+- [ ] - To be added
+
+#### Native/Builtin
+- [x] PC speaker support
+- [ ] 
 
 ## Compilation
 
@@ -26,5 +31,6 @@ WIP
 ## Credits
 
 None of this would be possible without the help of https://wiki.osdev.org/
+Limine Barebones https://github.com/limine-bootloader/limine-barebones
 
 @VoTheHandsome for the awesome boxart!!!
