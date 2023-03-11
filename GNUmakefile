@@ -24,11 +24,11 @@ qemu_dir : wipe-emu
 	mkdir qemu
 
 .PHONY: run
-run: $(OSIDENTIF).iso
+run:
 	qemu-system-x86_64 -name $(OSNAME) -M q35 -m 4G -cdrom $(OSIDENTIF).iso -boot d -drive file=qemu/HDD.img,index=0,media=disk,format=raw -audiodev pa,id=snd0 -machine pcspk-audiodev=snd0 -device intel-hda -device hda-duplex
 
 .PHONY: run-uefi
-run-uefi: ovmf-x64 $(OSIDENTIF).iso
+run-uefi: ovmf-x64
 	qemu-system-x86_64 -name $(OSNAME) -M q35 -m 4G -bios ovmf-x64/OVMF.fd -cdrom $(OSIDENTIF).iso -boot d -drive file=qemu/HDD.img,index=0,media=disk,format=raw -device intel-hda -audiodev pa,id=snd0 -machine pcspk-audiodev=snd0 -device hda-duplex
 
 ovmf-x64:
@@ -40,16 +40,12 @@ limine:
 	$(MAKE) -C limine
 
 .PHONY: kernel
-kernel: headers
+kernel:
 	$(MAKE) -C kernel
-.PHONY: headers
-headers:
-	rm -rf iso_root
-	mkdir -p iso_root
-# Compile headers and install them to our kernel
-	$(MAKE) -C headers install
 
 $(OSIDENTIF).iso: limine kernel
+	rm -rf iso_root
+	mkdir -p iso_root
 # Copy these files into the root of the ISO
 # - Kernel executable
 # - Limine config
@@ -64,8 +60,8 @@ $(OSIDENTIF).iso: limine kernel
 		iso_root -o $(OSIDENTIF).iso
 # Inject the limine bootloader into the ISO
 	limine/limine-deploy $(OSIDENTIF).iso
-# Clean up header compilation
-	$(MAKE) -C headers clean
+# Clean up library compilations
+	$(MAKE) -C libs clean
 # Remove the iso_root as the ISO has been created
 #rm -rf iso_root
 

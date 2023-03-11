@@ -7,3 +7,5 @@ kernel/limine.h
 *.img
 *.o
 *.d
+glibc-2.9
+glibc.tar.gz

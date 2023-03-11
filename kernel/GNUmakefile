@@ -7,6 +7,8 @@ override KERNEL := kernel.elf
 
 include ./../system-config.cfg
 
+LIB_OBJS=$(patsubst %.c,%.o,$(shell find ../libs -name '*.c'))
+
 # Default target.
 .PHONY: all
 all: $(KERNEL)
@@ -15,19 +17,23 @@ limine.h:
 	curl https://raw.githubusercontent.com/limine-bootloader/limine/trunk/limine.h -o $@
 
 # Link rules for the final kernel executable.
-$(KERNEL): $(OBJ)
-	$(LD) $(OBJ) $(LDFLAGS) -o $@
+$(KERNEL): lib $(OBJ)
+	$(LD) $(OBJ) $(LDFLAGS) -o $@ $(LIB_OBJS)
+
+lib:
+	$(MAKE) -C ../libs clean
+	$(MAKE) -C ../libs all
 
 # Include header dependencies.
 -include $(HEADER_DEPS)
 
 # Compilation rules for *.c files.
 %.o: %.c limine.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+	$(CC) -I../libs/include $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # Compilation rules for *.S files.
 %.o: %.S limine.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+	$(CC) -I../libs/include $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # Compilation rules for *.asm (nasm) files.
 %.o: %.asm

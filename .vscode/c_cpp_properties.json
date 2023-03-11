@@ -5,15 +5,14 @@
             "includePath": [
                 "/proot/limine",
                 "/proot/kernel",
-                "/proot/headers/include"
+                "/proot/libs/include"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "/usr/bin/cc",
-            "configurationProvider": "ms-vscode.makefile-tools",
+            "compilerPath": "/usr/bin/gcc",
             "compilerArgs": [
                 "-std=gnu11",
                 "-ffreestanding",
@@ -31,7 +30,8 @@
                 "-mno-sse2",
                 "-mno-red-zone",
                 "-mcmodel=kernel"
-            ]
+            ],
+            "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],
     "version": 4

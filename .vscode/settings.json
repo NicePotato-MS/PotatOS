@@ -1,47 +1,12 @@
 {
-    "cSpell.enableFiletypes": [
-        "bat",
-        "dockerfile",
-        "lua",
-        "makefile",
-        "powershell"
-    ],
-    "cSpell.words": [
-        "bochs",
-        "bootsector",
-        "CCFLAGS",
-        "cdest",
-        "CFLAGS",
-        "Cygwin",
-        "ffreestanding",
-        "IDIR",
-        "ifeq",
-        "ifneq",
-        "maxrem",
-        "nasm",
-        "ndisasm",
-        "nmemcpy",
-        "nstrlen",
-        "objcopy",
-        "oformat",
-        "pcspk",
-        "PotatOS",
-        "soundhw",
-        "STRALIGN",
-        "Ttext",
-        "vidmem",
-        "Wextra"
-    ],
-    "files.associations": {
-        "stdio.h": "c",
-        "stdint.h": "c",
-        "tty.h": "c",
-        "stddef.h": "c"
-    },
     "C_Cpp.default.compilerPath": "",
     "C_Cpp.default.includePath": [
-        "/proot/headers/include"
+        "./libs/include/"
     ],
     "C_Cpp.legacyCompilerArgsBehavior": false,
-    "C_Cpp.errorSquiggles": "enabledIfIncludesResolve"
+    "C_Cpp.errorSquiggles": "enabledIfIncludesResolve",
+    "C_Cpp.default.intelliSenseMode": "",
+    "C_Cpp.default.customConfigurationVariables": {
+    
+    },
 }

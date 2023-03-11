@@ -1,11 +1,11 @@
 #include <stdint.h>
 #include <stddef.h>
-#include <limine.h>
-
+#include <stdio.h>
+#include <stdlib.h>
 // DO NOT REMOVE STRING.H, THINGS *WILL* BREAK
 #include <string.h>
-#include <lowlevel.h>
 #include <pcspeaker.h>
+#include <limine.h>
 
 // The Limine requests can be placed anywhere, but it is important that
 // the compiler does not optimise them away, so, usually, they should
@@ -33,6 +33,8 @@ void _start(void) {
      || terminal_request.response->terminal_count < 1) {
         hcf();
     }
+    
+    pcspeaker_sound(1000);
 
     // We should now be able to call the Limine terminal to print out
     // a simple "Hello World" to screen.

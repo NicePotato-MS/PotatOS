@@ -1,7 +1,6 @@
 #ifndef _LOWLEVEL_H
 #define _LOWLEVEL_H 1
 
-#include <sys/cdefs.h>
 #include <cpuid.h>
 #include <stddef.h>
 #include <stdint.h>
