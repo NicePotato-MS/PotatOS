@@ -5,7 +5,7 @@
             "includePath": [
                 "/proot/limine",
                 "/proot/kernel",
-                "/proot/libs/include"
+                "/proot/libs/src/include"
             ],
             "defines": [
                 "_DEBUG",

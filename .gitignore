@@ -9,3 +9,6 @@ kernel/limine.h
 *.d
 glibc-2.9
 glibc.tar.gz
+iso_root
+kernel/build
+libs/build
