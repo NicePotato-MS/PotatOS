@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <string.h>
 
+#include <kernel.h>
+
 #include <limine.h>
 
 // Set the base revision to 1, this is recommended as this is the latest
@@ -20,27 +22,19 @@ struct limine_framebuffer_request framebuffer_request = {
     .revision = 0
 };
 
-// Halt and catch fire function.
-static void hcf(void) {
-    asm ("cli");
-    for (;;) {
-        asm ("hlt");
-    }
-}
-
 // The following will be our kernel's entry point.
 // If renaming _start() to something else, make sure to change the
 // linker script accordingly.
 void _kmain(void) {
     // Ensure the bootloader actually understands our base revision (see spec).
     if(LIMINE_BASE_REVISION_SUPPORTED == false) {
-        hcf();
+        halt();
     }
 
     // Ensure we got a framebuffer.
     if(framebuffer_request.response == NULL
      || framebuffer_request.response->framebuffer_count < 1) {
-        hcf();
+        halt();
     }
 
     // Fetch the first framebuffer.
@@ -55,5 +49,5 @@ void _kmain(void) {
     }
 
     // We're done, just hang...
-    hcf();
+    halt();
 }

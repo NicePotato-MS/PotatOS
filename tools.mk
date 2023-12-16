@@ -1,10 +1,5 @@
 CROS_CC := tools/bin/$(ARCH)-elf-gcc
-CROS_CFLAGS := -O2 -Iinclude
-ifeq ($(DEBUG),true)
-	CROS_CFLAGS += -g
-else
-	CROS_CFLAGS += -s
-endif
+CROS_KERNEL_CFLAGS := -g -O2 -Ikernel/include
 
 CROS_LD := tools/bin/$(ARCH)-elf-ld
 CROS_LDFLAGS := 
