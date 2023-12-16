@@ -1,3 +1,8 @@
+# HEYYY!!!!
+## This is the old repo
+### It has been moved to [here](https://github.com/NicePotato-MS/PotatOS_Try2)
+God this version is **terrible**
+
 <img src="https://raw.githubusercontent.com/NicePotato-MS/PotatOS/main/pictures-art/potatos-boxart.svg" width="500" height="500" />
 
 > Please note, above qr code links back here
