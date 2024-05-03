@@ -1,4 +1,9 @@
+isoroot
+build
+kbin
+kobj
 bin
 obj
+tools
 *.o
 *.elf

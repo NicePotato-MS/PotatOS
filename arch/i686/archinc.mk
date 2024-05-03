@@ -7,21 +7,22 @@ CROS_KERNEL_CFLAGS += \
     -fno-stack-check \
     -fno-lto \
     -fPIE \
-    -m64 \
-    -march=x86-64 \
-	-mgeneral-regs-only \
+    -m32 \
+    -march=i686 \
+    -mgeneral-regs-only \
     -mno-red-zone \
+	-lgcc \
     -Ilimine
 
 CROS_LDFLAGS += \
-    -m elf_x86_64 \
+    -m elf_i386 \
     -nostdlib \
     -static \
     -pie \
     --no-dynamic-linker \
     -z text \
     -z max-page-size=0x1000 \
-    -T arch/x86_64/linker.ld
+    -T arch/i686/linker.ld
 
 KERNEL_MODULES += arch/$(ARCH)/kernel
 KERNEL_MODULES += $(KRNLIB)/x86

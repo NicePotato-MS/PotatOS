@@ -8,23 +8,29 @@ override MAKEFLAGS += -rR
 ARCH ?= x86_64
 DEBUG ?= true
 
-KERNEL_SRC_C := $(shell find kernel -type f -name '*.c')
+KRNLIB = kernel/lib
+
+KERNEL_SRC_C := 
+KERNEL_MODULES :=
 
 include tools.mk
+-include modules.mk
 -include arch/$(ARCH)/archinc.mk
 
-KERNEL_OBJ := $(addprefix obj/,$(KERNEL_SRC_C:.c=.c.o) $(KERNEL_SRC_S:.S=.S.o))
-KERNEL_DEP := $(addprefix obj/,$(KERNEL_SRC_C:.c=.c.d) $(KERNEL_SRC_S:.S=.S.d))
+KERNEL_SRC_C += $(foreach module,$(KERNEL_MODULES),$(shell find $(module) -type f -name '*.c'))
+
+KERNEL_OBJ := $(addprefix kobj/,$(KERNEL_SRC_C:.c=.c.o) $(KERNEL_SRC_S:.S=.S.o))
+KERNEL_DEP := $(addprefix kobj/,$(KERNEL_SRC_C:.c=.c.d) $(KERNEL_SRC_S:.S=.S.d))
 
 .PHONY: iso
-iso: errorcheck fullclean bin/kernel.elf
+iso: errorcheck fullclean kbin/kernel.elf
 	rm -rf isoroot
 	mkdir isoroot
-	cp bin/kernel.elf limine.cfg limine/limine-bios.sys \
+	cp kbin/kernel.elf limine.cfg limine/limine-bios.sys \
     	limine/limine-bios-cd.bin limine/limine-uefi-cd.bin isoroot/
 	mkdir -p isoroot/EFI/BOOT
 	if [ "$(DEBUG)" = "false" ]; then \
-        strip bin/kernel.elf; \
+        strip kbin/kernel.elf; \
     fi
 
 	
@@ -56,21 +62,26 @@ errorcheck:
 fullclean:
 	rm -rf bin
 	rm -rf obj
+	rm -rf kbin
+	rm -rf kobj
 
 # Link rules for the final kernel executable.
-bin/kernel.elf: $(KERNEL_OBJ)
+kbin/kernel.elf: $(KERNEL_OBJ)
 	mkdir -p "$$(dirname $@)"
 	$(CROS_LD) $(KERNEL_OBJ) $(CROS_LDFLAGS) -o $@
-	if [ "$(DEBUG)" = "false" ]; then \
+	if ["$(DEBUG)" = "false"]; then \
         strip bin/kernel.elf; \
     fi
 
 # Compilation rules for *.c files.
-obj/%.c.o: %.c
+kobj/%.c.o: %.c
 	mkdir -p "$$(dirname $@)"
 	$(CROS_CC) $(CROS_KERNEL_CFLAGS) -c $< -o $@
+	if [ "$(OUT_ASM)" = "true" ]; then \
+		$(CROS_CC) -S -fverbose-asm $(CROS_KERNEL_CFLAGS) -c $< -o $@.S; \
+	fi
 
 # Compilation rules for *.S files.
-obj/%.S.o: %.S
+kobj/%.S.o: %.S
 	mkdir -p "$$(dirname $@)"
 	$(CROS_CC) $(CROS_KERNEL_CFLAGS) -c $< -o $@

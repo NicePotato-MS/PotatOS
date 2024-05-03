@@ -3,23 +3,24 @@
 
 ARCH ?= x86_64
 DEBUG ?= true
+OUT_ASM ?= false
 
 M ?= 512
 
-MKBUILD = make -f build.mk iso DEBUG=$(DEBUG)
+MKBUILD = make -f build.mk iso DEBUG=$(DEBUG) ARCH=$(ARCH) OUT_ASM=$(OUT_ASM)
 
 .PHONY: run
 run: iso
-	qemu-system-$(ARCH) -cdrom build/potatos-$(ARCH).iso -m $(M)M
+	qemu-system-$(ARCH) -cdrom build/potatos-$(ARCH).iso -m $(M)M -D ./log.txt
 
 .PHONY: iso
 iso: clean
-	$(MKBUILD) ARCH=$(ARCH)
+	$(MKBUILD)
 
 .PHONY: all
 all: clean
-	$(MKBUILD) ARCH=x86_64
-	$(MKBUILD) ARCH=i386
+	$(MKBUILD)
+#	$(MKBUILD) ARCH=i386
 
 .PHONY: clean
 	rm -rf build
