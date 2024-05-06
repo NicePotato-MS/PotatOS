@@ -1,5 +1,4 @@
-#ifndef _KERNEL_HEADER
-#define _KERNEL_HEADER
+#pragma once
 
 #ifdef __cplusplus
 extern "C"
@@ -11,6 +10,4 @@ void panic(unsigned int exitcode);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

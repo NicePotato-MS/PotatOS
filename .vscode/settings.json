@@ -1,5 +1,10 @@
 {
     "editor.formatOnPaste": true,
     "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4, ColumnLimit: 0}",
-    "Lua.runtime.version": "Lua 5.4"
+    "Lua.runtime.version": "Lua 5.4",
+    "files.associations": {
+        "array": "cpp",
+        "string": "cpp",
+        "string_view": "cpp"
+    }
 }

@@ -11,7 +11,7 @@ MKBUILD = make -f build.mk iso DEBUG=$(DEBUG) ARCH=$(ARCH) OUT_ASM=$(OUT_ASM)
 
 .PHONY: run
 run: iso
-	qemu-system-$(ARCH) -cdrom build/potatos-$(ARCH).iso -m $(M)M -D ./log.txt
+	qemu-system-x86_64 -cdrom build/potatos-$(ARCH).iso -m $(M)M -D ./log.txt
 
 .PHONY: iso
 iso: clean

@@ -1,5 +1,4 @@
-#ifndef _LIB_STRING_HEADER
-#define _LIB_STRING_HEADER
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,6 +17,4 @@ int memcmp(const void *ptr1, const void *ptr2, size_t n);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif

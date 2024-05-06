@@ -260,42 +260,13 @@ local dina_7x16 = {
 local bits = {}
 
 for k, packed in ipairs(dina_7x16) do
+    local test = ""
     for i = 7, 1, -1 do
-        bits[#bits+1] = (packed & (1 << i)) ~= 0 and 1 or 0
+        if (packed & (1 << i)) ~= 0 and 1 or 0 == 1 then
+            test = test.."*"
+        else
+            test = test.." "
+        end
     end
+    print(test)
 end
-
-local current_byte = 0
-local bit_count = 0
-
-local hexOut = "\t"
-local currentGroup = 1
-
-local function appendHex(number)
-    hexOut = hexOut .. "0x" .. string.format("%02X", number) .. ", "
-    currentGroup = currentGroup + 1;
-    if currentGroup == 15 then
-        hexOut = hexOut .. "\n\t"
-        currentGroup = 1
-    end
-end
-
-for i = 1, #bits do
-    -- Append the current bit to the current byte
-    current_byte = (current_byte << 1) | bits[i]
-    bit_count = bit_count + 1
-
-    -- If 8 bits have been accumulated (a byte), add it to the numbers table
-    if bit_count == 8 then
-        appendHex(current_byte)
-        current_byte = 0
-        bit_count = 0
-    end
-end
-
--- If there are remaining bits not forming a complete byte, add them as a partial byte
-if bit_count > 0 then
-    appendHex(current_byte)
-end
-
-print(hexOut)

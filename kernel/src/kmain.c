@@ -6,19 +6,11 @@
 #include <kernel.h>
 #include <text.h>
 
-#include <fonts/dina_7x16.h>
+#include <fonts/dina_8x16.h>
 
 #include <limine.h>
 
-// Set the base revision to 1, this is recommended as this is the latest
-// base revision described by the Limine boot protocol specification.
-// See specification for further info.
-
-LIMINE_BASE_REVISION(1)
-
-// The Limine requests can be placed anywhere, but it is important that
-// the compiler does not optimise them away, so, in C, they should
-// NOT be made "static".
+LIMINE_BASE_REVISION(2)
 
 struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST,
@@ -44,20 +36,22 @@ void _kmain(void) {
     uint64_t fb_width = framebuffer->width;
     uint64_t fb_height = framebuffer->height;
 
-    extractFont(dina_7x16);
-
-    size_t chr = 0;
+    uint32_t chr = 0;
 
     for (size_t y = 0; y < 16; y++) {
         for (size_t x = 0; x < 16; x++) {
-            for (size_t cy = 0; cy < dina_7x16.size_y; cy++) {
-                for (size_t cx = 0; cx < dina_7x16.size_x; cx++) {
-                    //uint8_t color = dina_7x16.loaded[chr] * 255;
-                    uint8_t color = chr;
-                    fb_addr[(y * fb_width * dina_7x16.size_y) + (x * dina_7x16.size_x) + (cy * fb_width) + cx] = (color << 16 | color << 8 | color);
+            for (size_t cy = 0; cy < dina_8x16.size_y; cy++) {
+                for (size_t cx = 0; cx < dina_8x16.size_x; cx++) {
+                    uint8_t color;
+                    if ((dina_8x16.data[(chr*dina_8x16.size_y)+cy]) & (0b10000000 >> cx)) {
+                        color = 255;
+                    } else {
+                        color = 0;
+                    }
+                    fb_addr[(y * fb_width * dina_8x16.size_y) + (x * dina_8x16.size_x) + (cy * fb_width) + cx] = (color << 16 | color << 8 | color);
                 }
             }
-            chr = chr+2;
+            chr++;
         }
     }
 

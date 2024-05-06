@@ -69,7 +69,7 @@ fullclean:
 kbin/kernel.elf: $(KERNEL_OBJ)
 	mkdir -p "$$(dirname $@)"
 	$(CROS_LD) $(KERNEL_OBJ) $(CROS_LDFLAGS) -o $@
-	if ["$(DEBUG)" = "false"]; then \
+	if [ "$(DEBUG)" = "false" ]; then \
         strip bin/kernel.elf; \
     fi
 

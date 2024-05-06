@@ -1,5 +1,4 @@
-#ifndef _LIB_DINA_7x16_HEADER
-#define _LIB_DINA_7x16_HEADER
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
@@ -8,10 +7,8 @@ extern "C" {
 #include <stddef.h>
 #include <text.h>
 
-extern bitmap_font dina_7x16;
+extern bitmap_font dina_8x16;
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif
