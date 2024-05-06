@@ -11,7 +11,8 @@ CROS_KERNEL_CFLAGS += \
     -march=x86-64 \
 	-mgeneral-regs-only \
     -mno-red-zone \
-    -Ilimine
+    -Ilimine \
+	-Ikernel/x86/include
 
 CROS_LDFLAGS += \
     -m elf_x86_64 \

@@ -265,11 +265,9 @@ uint8_t font_data[] = {
     0x00, 0x28, 0x28, 0x00, 0x44, 0x44, 0x44, 0x44, 0x44, 0x44, 0x3C, 0x04, 0x04, 0x38, 0x00, 0x00,  //   255
 };
 
-uint8_t font_loaded[sizeof(font_data)*256];
-
 bitmap_font dina_8x16 = {
     FONT_SIZE_X,
     FONT_SIZE_Y,
     FONT_SIZE_X* FONT_SIZE_Y,
-font_data,
+    font_data,
 };

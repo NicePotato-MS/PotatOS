@@ -1,0 +1,3 @@
+-Ikernel/include
+-Ikernel/x86/include
+-Ilimine

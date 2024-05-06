@@ -12,7 +12,8 @@ CROS_KERNEL_CFLAGS += \
     -mgeneral-regs-only \
     -mno-red-zone \
 	-lgcc \
-    -Ilimine
+    -Ilimine \
+	-Ikernel/x86/include
 
 CROS_LDFLAGS += \
     -m elf_i386 \

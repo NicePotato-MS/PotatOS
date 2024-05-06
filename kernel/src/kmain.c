@@ -9,6 +9,7 @@
 #include <fonts/dina_8x16.h>
 
 #include <limine.h>
+#include <io.h>
 
 LIMINE_BASE_REVISION(2)
 
@@ -54,7 +55,7 @@ void _kmain(void) {
             chr++;
         }
     }
-
+    
         // for (size_t y = 0; y < dina_7x16.size_y; y++) {
         //     for (size_t x = 0; x < dina_7x16.size_x; x++) {
         //         uint8_t color = dina_7x16.loaded[(y * dina_7x16.size_x + x) + (dina_7x16.glyph_size * 65)] * 255;
@@ -73,6 +74,5 @@ void _kmain(void) {
         //     }
         // }
 
-        // We're done, just hang...
         halt();
 }

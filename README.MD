@@ -7,3 +7,5 @@ Potato Operating System for Potato Computers
 ## Get cross compiler from https://github.com/lordmilko/i686-elf-tools
 
 Download (arch)-elf-tools-linux.zip and extract it to tools/(arch)/
+
+> I am aware this isn't the best way to do this. I'll come up with something better later...

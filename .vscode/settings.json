@@ -6,5 +6,6 @@
         "array": "cpp",
         "string": "cpp",
         "string_view": "cpp"
-    }
+    },
+    "C_Cpp.default.compilerPath": "/home/xubuntu/Documents/PotatOS_Try2/tools/x86_64/bin/x86_64-elf-gcc"
 }
