@@ -1,3 +1,6 @@
 -Ikernel/include
 -Ikernel/x86/include
 -Ilimine
+-Istdint.h
+-Istddef.h
+-Istdbool.h

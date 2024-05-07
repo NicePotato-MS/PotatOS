@@ -4,14 +4,18 @@
 ARCH ?= x86_64
 DEBUG ?= true
 OUT_ASM ?= false
+LIMINE_CUSTOM ?= false
+# LIMINE_CUSTOM will use a custom version of limine not included in the repo
+# My custom-ish version has a modified source to skip a sanity check.
 
 M ?= 512
 
-MKBUILD = make -f build.mk iso DEBUG=$(DEBUG) ARCH=$(ARCH) OUT_ASM=$(OUT_ASM)
+MKBUILD = make -f build.mk iso DEBUG=$(DEBUG) ARCH=$(ARCH) OUT_ASM=$(OUT_ASM) LIMINE_CUSTOM=$(LIMINE_CUSTOM)
 
 .PHONY: run
 run: iso
-	qemu-system-x86_64 -cdrom build/potatos-$(ARCH).iso -m $(M)M -D ./log.txt
+# Note that boot order below is not just cd, it's c (hdd), d (cd)
+	qemu-system-x86_64 -boot order=cd -cdrom build/potatos-$(ARCH).iso -m $(M)M -D ./log.txt
 
 .PHONY: iso
 iso: clean
@@ -20,7 +24,6 @@ iso: clean
 .PHONY: all
 all: clean
 	$(MKBUILD)
-#	$(MKBUILD) ARCH=i386
 
 .PHONY: clean
 	rm -rf build

@@ -7,6 +7,8 @@ override MAKEFLAGS += -rR
 
 ARCH ?= x86_64
 DEBUG ?= true
+OUT_ASM ?= false
+LIMINE_CUSTOM ?= false
 
 KRNLIB = kernel/lib
 
@@ -22,25 +24,31 @@ KERNEL_SRC_C += $(foreach module,$(KERNEL_MODULES),$(shell find $(module) -type 
 KERNEL_OBJ := $(addprefix kobj/,$(KERNEL_SRC_C:.c=.c.o) $(KERNEL_SRC_S:.S=.S.o))
 KERNEL_DEP := $(addprefix kobj/,$(KERNEL_SRC_C:.c=.c.d) $(KERNEL_SRC_S:.S=.S.d))
 
+ifeq ($(LIMINE_CUSTOM),"false")
+LIMINE := limine
+else
+LIMINE := limine-test/limine/bin
+endif
+
 .PHONY: iso
 iso: errorcheck fullclean kbin/kernel.elf
 	rm -rf isoroot
 	mkdir isoroot
-	cp kbin/kernel.elf limine.cfg limine/limine-bios.sys \
-    	limine/limine-bios-cd.bin limine/limine-uefi-cd.bin isoroot/
+	cp kbin/kernel.elf limine.cfg $(LIMINE)/limine-bios.sys \
+    	$(LIMINE)/limine-bios-cd.bin $(LIMINE)/limine-uefi-cd.bin isoroot/
 	mkdir -p isoroot/EFI/BOOT
 	if [ "$(DEBUG)" = "false" ]; then \
         strip kbin/kernel.elf; \
     fi
 
 	
-	if [ "$(ARCH)" = "x86_64" ] || [ "$(ARCH)" = "i386" ]; then \
-        cp limine/BOOTX64.EFI isoroot/EFI/BOOT/; \
-		cp limine/BOOTIA32.EFI isoroot/EFI/BOOT/; \
+	if [ "$(ARCH)" = "x86_64" ] || [ "$(ARCH)" = "i686" ]; then \
+        cp $(LIMINE)/BOOTX64.EFI isoroot/EFI/BOOT/; \
+		cp $(LIMINE)/BOOTIA32.EFI isoroot/EFI/BOOT/; \
     elif [ "$(ARCH)" = "aarch64" ]; then \
-        cp limine/BOOTAA64.EFI isoroot/EFI/BOOT/; \
+        cp $(LIMINE)/BOOTAA64.EFI isoroot/EFI/BOOT/; \
 	elif [ "$(ARCH)" = "riscv64" ]; then \
-        cp limine/BOOTRISCV64.EFI isoroot/EFI/BOOT/; \
+        cp $(LIMINE)/BOOTRISCV64.EFI isoroot/EFI/BOOT/; \
     fi
 
 	mkdir -p build
@@ -50,7 +58,7 @@ iso: errorcheck fullclean kbin/kernel.elf
         -efi-boot-part --efi-boot-image --protective-msdos-label \
         isoroot -o build/potatos-$(ARCH).iso
 
-	./limine/limine bios-install build/potatos-$(ARCH).iso
+	./$(LIMINE)/limine bios-install build/potatos-$(ARCH).iso
 	
 errorcheck:
 	if [ ! -d "arch/$(ARCH)" ]; then \

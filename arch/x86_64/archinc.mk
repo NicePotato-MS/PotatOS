@@ -25,5 +25,5 @@ CROS_LDFLAGS += \
     -T arch/x86_64/linker.ld
 
 KERNEL_MODULES += arch/$(ARCH)/kernel
-KERNEL_MODULES += $(KRNLIB)/x86
+KERNEL_MODULES += kernel/x86
 KERNEL_MODULES += $(KRNLIB)/limine
