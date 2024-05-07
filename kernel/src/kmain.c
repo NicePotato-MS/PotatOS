@@ -31,11 +31,27 @@ void _kmain(void) {
 
     // Fetch the first framebuffer.
 
-    struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
+    struct limine_framebuffer *framebuffer =
+        framebuffer_request.response->framebuffers[0];
     uint32_t *fb_addr = framebuffer->address;
     uint32_t fb_pitch = framebuffer->pitch;
     uint32_t fb_width = framebuffer->width;
     uint32_t fb_height = framebuffer->height;
+
+    if (!srl_Init(srl_COM1, SRL_BAUD_38400)) {
+        for (size_t i = 0; i < fb_width*fb_height; i++) {
+            fb_addr[i] = 0x00FF0000;
+        }
+        halt();
+    } 
+    srl_WriteByte(srl_COM1, 'S');
+    srl_WriteByte(srl_COM1, 'e');
+    srl_WriteByte(srl_COM1, 'r');
+    srl_WriteByte(srl_COM1, 'i');
+    srl_WriteByte(srl_COM1, 'a');
+    srl_WriteByte(srl_COM1, 'l');
+    srl_WriteByte(srl_COM1, '!');
+    srl_WriteByte(srl_COM1, '\n');
 
     for(size_t y = 0; y < fb_height; y++) {
         for(size_t x = 0; x < fb_width; x++) {
