@@ -4,3 +4,4 @@
 -Istdint.h
 -Istddef.h
 -Istdbool.h
+-std=c23

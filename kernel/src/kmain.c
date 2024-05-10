@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include <io.h>
+#include <serial.h>
 #include <kernel.h>
 #include <limine.h>
 #include <text.h>
@@ -43,15 +43,9 @@ void _kmain(void) {
             fb_addr[i] = 0x00FF0000;
         }
         halt();
-    } 
-    srl_WriteByte(srl_COM1, 'S');
-    srl_WriteByte(srl_COM1, 'e');
-    srl_WriteByte(srl_COM1, 'r');
-    srl_WriteByte(srl_COM1, 'i');
-    srl_WriteByte(srl_COM1, 'a');
-    srl_WriteByte(srl_COM1, 'l');
-    srl_WriteByte(srl_COM1, '!');
-    srl_WriteByte(srl_COM1, '\n');
+    }
+
+    srl_Writef(srl_COM1, "𝒻𝓇𝑒𝒶𝓀𝓎 𝒷𝑜𝒷\n");
 
     for(size_t y = 0; y < fb_height; y++) {
         for(size_t x = 0; x < fb_width; x++) {
