@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <string.h>
 
 #include <serial.h>
@@ -45,7 +46,7 @@ void _kmain(void) {
         halt();
     }
 
-    srl_Writef(srl_COM1, "𝒻𝓇𝑒𝒶𝓀𝓎 𝒷𝑜𝒷\n");
+    srl_Writef(srl_COM1, "%s\n", NULL);
 
     for(size_t y = 0; y < fb_height; y++) {
         for(size_t x = 0; x < fb_width; x++) {

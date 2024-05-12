@@ -120,34 +120,34 @@ typedef struct {
 extern srl_Port srl_COM1;
 
 // Set Interrupt Enabled Register of Serial port
-static inline void srl_SetInterruptEnabled(srl_Port port, uint8_t state) {
+inline void srl_SetInterruptEnabled(srl_Port port, uint8_t state) {
     outb(port.id + SRL_REG_INTERRUPT_ENABLE, state);
 }
 
 // Set Line Control Register of Serial port to state
-static inline void srl_SetLineControlRegister(srl_Port port, uint8_t state) {
+inline void srl_SetLineControlRegister(srl_Port port, uint8_t state) {
     outb(port.id + SRL_REG_LINE_CONTROL, state);
 }
 
 // Set First In / First Out Control Register of Serial port to state
-static inline void srl_SetFIFOControlRegister(srl_Port port, uint8_t state) {
+inline void srl_SetFIFOControlRegister(srl_Port port, uint8_t state) {
     outb(port.id + SRL_REG_FIFO, state);
 }
 
 // Set Modem Control Register of Serial port to state
-static inline void srl_SetModemControlRegister(srl_Port port, uint8_t state) {
+inline void srl_SetModemControlRegister(srl_Port port, uint8_t state) {
     outb(port.id + SRL_REG_MODEM_CONTROL, state);
 }
 
 // Set Divisor Value for Baud rate without preserving Line Control Register
-static inline void srl_SetDivisorUnsafe(srl_Port port, uint16_t divisor) {
+inline void srl_SetDivisorUnsafe(srl_Port port, uint16_t divisor) {
     srl_SetLineControlRegister(port, SRL_DLAB_ON);
     outb(port.id + SRL_REG_DIV_LOW, divisor & 0xFF);
     outb(port.id + SRL_REG_DIV_HIGH, (divisor >> 8) & 0xFF);
 }
 
 // Set Divisor Value for Baud rate while preserving Line Control Register
-static inline void srl_SetDivisorSafe(srl_Port port, uint16_t divisor) {
+inline void srl_SetDivisorSafe(srl_Port port, uint16_t divisor) {
     uint8_t lcr = inb(port.id + SRL_REG_LINE_CONTROL);
     srl_SetLineControlRegister(port, SRL_DLAB_ON);
     outb(port.id + SRL_REG_DIV_LOW, divisor & 0xFF);
@@ -156,14 +156,14 @@ static inline void srl_SetDivisorSafe(srl_Port port, uint16_t divisor) {
 }
 
 // Read a byte from a Serial port
-static inline uint8_t srl_ReadByte(srl_Port port) { return inb(port.id); }
+inline uint8_t srl_ReadByte(srl_Port port) { return inb(port.id); }
 
-static inline void srl_TransmitYield(srl_Port port) {
+inline void srl_TransmitYield(srl_Port port) {
     while (!(inb(port.id + SRL_REG_LINE_STATUS) & SRL_TRANSMITTER_HOLDING_EMPTY));
 }
 
 // Write a byte to a Serial port
-static inline void srl_WriteByte(srl_Port port, uint8_t data) {
+inline void srl_WriteByte(srl_Port port, uint8_t data) {
     srl_TransmitYield(port); // This might be a bad idea
     outb(port.id, data);
 }

@@ -15,6 +15,12 @@ void *memset(void *dest, int value, size_t n);
 /* Compare the first n bytes of memory areas pointed to by ptr1 and ptr2 */
 int memcmp(const void *ptr1, const void *ptr2, size_t n);
 
+inline size_t strlen(const char *str) {
+    const char *s;
+    for (s = str; *s; ++s);
+    return (s - str);
+}
+
 #ifdef __cplusplus
 }
 #endif

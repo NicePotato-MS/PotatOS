@@ -2,28 +2,41 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdbool.h>
+#include <string.h>
 #include <ctype.h>
 
 #define CONTROL_CHARACTER '%'
+#define CONTROL_CHARACTER_STR "%"
+
+#define BUFFER_SIZE 144
 
 #define SIGN_NONE 0
 
 #define FLAGS_NONE 0
 #define FLAGS_PAD_ZERO 0b1 // Add extra 0s to fill space
-#define FLAGS_LEFT_ALIGN 0b1 << 1
-#define FLAGS_SHOW_SIGN 0b1 << 2 // Always show a '+' or '-' on a number
-#define FLAGS_SPACE_SIGN 0b1 << 3  // Leave space where a '+' would be
-#define FLAGS_ALTERNATE 0b1 << 4   // Alternate Form flag (e.g. add 0x to %x)
+#define FLAGS_LEFT_ALIGN 0b10 
+#define FLAGS_SHOW_SIGN 0b100 // Always show a '+' or '-' on a number
+#define FLAGS_SPACE_SIGN 0b1000  // Leave space where a '+' would be
+#define FLAGS_ALTERNATE 0b10000   // Alternate Form flag (e.g. add 0x to %x)
+#define FLAGS_SIGNED 0b100000     // Signed value
+#define FLAGS_GROUPED 0b1000000  // Unused flag
 
-static int putchar_noop(void) { return 0; }
+static inline int putchar_noop(void) { return 0; }
 
-#define __putchar(chr)                                              \
-    do {                                                            \
-        char out_buffer[sizeof(chr)] = {chr};                       \
-        if (putchar(out_buffer, putchar_args, sizeof(chr)) == -1) { \
-            return -1;                                              \
-        }                                                           \
-    } while (0) // do while adds another scope for out_buffer
+static inline int __format_atoi(const char **str) {
+    int val;
+    for (val = 0; '0' <= **str && **str <= '9'; ++*str) {
+        val *= 10;
+        val += **str - '0';
+    }
+    return val;
+}
+
+#define __putchar(str)                                      \
+    if (putchar(str, putchar_args, sizeof(str)-1) == -1) {    \
+        return -1;                                          \
+    }
 
 /**
  * Formats a string and outputs to an input putchar function
@@ -40,11 +53,12 @@ int format(void *in_putchar, void *putchar_args, const char* str_in, va_list va)
     int (*putchar)(const char *, void *, size_t);
     putchar = in_putchar ? in_putchar : (void *)putchar_noop;
 
-    int total_chars;
 
     const char *alphabet;
-    unsigned char sign, sign_bit;
+    unsigned int total_chars;
     int flags, width;
+    uint8_t log2base;
+    uint64_t sign_bit;
     
     while (*str_in) {
         if (*str_in != CONTROL_CHARACTER) {
@@ -57,7 +71,6 @@ int format(void *in_putchar, void *putchar_args, const char* str_in, va_list va)
         }
 
         str_in++;
-        sign = SIGN_NONE;
         flags = FLAGS_NONE;
     gather_flags:
         switch (*str_in++) {
@@ -81,20 +94,220 @@ int format(void *in_putchar, void *putchar_args, const char* str_in, va_list va)
                 break;
         }
 
+        // flags
+        
         width = 0;
         if (isdigit(*str_in)) {
-            width = 
+            width = __format_atoi(&str_in);
+        } else if (*str_in == '*') {
+            width = va_arg(va, int);
+            if (width < 0) {
+                flags |= FLAGS_LEFT_ALIGN;
+                width = -width;
+            }
+            str_in++;
         }
+
+        // size
         
-        switch (*str_in++) {
-            case 'a':
-                __putchar("(formatted)");
+        sign_bit = (1ul << 31);
+        switch (*str_in) {
+            case 'h':
+                str_in++;
+                if (*str_in == 'h') {
+                    str_in++;
+                    sign_bit = (1ul << 7);
+                } else {
+                    sign_bit = (1ul << 15);
+                }
                 break;
-            case CONTROL_CHARACTER:
-                __putchar(CONTROL_CHARACTER);
+            case 'l':
+            case 't': // ptrdiff_t
+            case 'z': // size_t
+            case 'Z': // size_t
+                str_in++;
+                sign_bit = (1ul << 63);
                 break;
             default:
+                break;
+        }
 
+        // format
+
+        alphabet = "0123456789abcdefpx";
+        log2base = 0;
+
+        switch (*str_in++) {
+            case 'p':
+                flags |= FLAGS_ALTERNATE;
+                log2base = 4;
+                sign_bit = 63;
+                goto format_number;
+            case 'X':
+                alphabet = "0123456789ABCDEFPx";
+                // fallthrough
+            case 'x':
+                log2base = 4;
+                goto format_number;
+            case 'b':
+                alphabet = "0123456789abcdefpb";
+                log2base = 1;
+                goto format_number;
+            case 'o':
+                log2base = 3;
+                goto format_number;
+            case 'd':
+            case 'i':
+                flags |= FLAGS_SIGNED;
+                // fallthrough
+            case 'u':
+                uint64_t value;
+                flags &= ~FLAGS_ALTERNATE;
+            format_number:
+                value = va_arg(va, uint64_t);
+
+                if (flags & FLAGS_LEFT_ALIGN) { flags &= ~FLAGS_PAD_ZERO; }
+                if (!(flags & FLAGS_SIGNED)) {
+                    flags &= ~(FLAGS_SHOW_SIGN | FLAGS_SPACE_SIGN);
+                }
+
+                bool negative = false;
+                if (flags & FLAGS_SIGNED) {
+                    if (value == sign_bit) {
+                        negative = false;
+                    } else {
+                        if (value & sign_bit) { // If negative
+                            value = ~value + 1; // Make positive
+                            value &= sign_bit | (sign_bit - 1);
+                            negative = true;
+                        }
+                    }
+                }
+
+                int len = 0;
+                unsigned int digit;
+                char buffer[BUFFER_SIZE];
+                char alternate_form_middle_char, sign_character;
+
+                if (!value && log2base != 3) { flags &= FLAGS_ALTERNATE; }
+                if (value) {
+                    do {
+                        if (!log2base) {
+                            digit = value % 10;
+                            value /= 10;
+                        } else {
+                            digit = value;
+                            digit &= (1u << log2base) - 1;
+                            value >>= log2base;
+                        }
+                        buffer[len++] = alphabet[digit];
+                    } while (value);
+                }
+
+                int total = len;
+                unsigned int padding_zeros = 0;
+                
+                if (width && (flags & FLAGS_PAD_ZERO) &&
+                (negative ||
+                (flags & (FLAGS_SHOW_SIGN | FLAGS_SPACE_SIGN)))) {
+                    width--;
+                }
+                if ((flags & FLAGS_PAD_ZERO) && (len < width)) {
+                    padding_zeros += (width - len);
+                    len = width;
+                }
+                if (flags & FLAGS_ALTERNATE) {
+                    if (!(log2base == 3) && len && len >= width &&
+                    (padding_zeros || buffer[len - 1] == '0')) {
+                        len--;
+                        if (len < total) { total = len; }
+                        if (padding_zeros) { padding_zeros--; }
+                        if (len && (log2base == 4 || log2base == 1) &&
+                        (padding_zeros || buffer[len - 1] == '0')) {
+                            if (padding_zeros) { padding_zeros--; }
+                            len--;
+                            if (len < total) { total = len; }
+                        }
+                    }
+                    alternate_form_middle_char = 0;
+                    if (log2base == 4 || log2base == 1) {
+                        len++;
+                        alternate_form_middle_char = alphabet[17];
+                    }
+                    len++;
+                }
+                sign_character = 0;
+                if (negative) {
+                    len++;
+                    sign_character = '-';
+                } else if (flags & FLAGS_SHOW_SIGN) {
+                    len++;
+                    sign_character = '+';
+                } else if (flags & FLAGS_SPACE_SIGN) {
+                    len++;
+                    sign_character = ' ';
+                }
+                if (!(flags & FLAGS_PAD_ZERO) && !(flags & FLAGS_LEFT_ALIGN)) {
+                    if (len < width) {
+                        for (int i = 0; i < width - len; i++) {
+                            __putchar(" ");
+                        }
+                    }
+                }
+                if (sign_character &&
+                putchar(&sign_character, putchar_args, 1) == -1) {
+                    return -1;
+                }
+                if (flags & FLAGS_ALTERNATE) {
+                    __putchar("0");
+                    if (alternate_form_middle_char &&
+                    putchar(&alternate_form_middle_char, putchar_args, 1) == -1) {
+                        return -1;
+                    }
+                }
+                for (size_t i = 0; i < padding_zeros; i++) { __putchar("0"); }
+                // Reverse buffer
+                for (int i = 0; i < total / 2; i++) {
+                    char temp = buffer[i];
+                    buffer[i] = buffer[total - i - 1];
+                    buffer[total - i - 1] = temp;
+                }
+                __putchar(buffer);
+                if (flags & FLAGS_LEFT_ALIGN) {
+                    if (len < width) {
+                        for (int i = 0; i < width - len; i++) {
+                            __putchar(" ");
+                        }
+                    }
+                }
+
+                break;
+            case 's':
+                void *str = va_arg(va, void *);
+                if (!str) { str = "(null)"; }
+
+                len = (int)strlen(str);
+                
+                if (!(flags & FLAGS_LEFT_ALIGN)) {
+                    for (int i = 0; i < width - len; i++) {
+                        __putchar(" ");
+                    }
+                }
+
+                putchar(str, putchar_args, len);                
+
+                if (flags & FLAGS_LEFT_ALIGN) {
+                    for (int i = 0; i < width - len; i++) {
+                        __putchar(" ");
+                    }
+                }
+                break;
+            case CONTROL_CHARACTER:
+                __putchar(CONTROL_CHARACTER_STR);
+                break;
+            default:
+                putchar(&str_in[-1], putchar_args, 1);
+                break;
         }
     }
     return 0;

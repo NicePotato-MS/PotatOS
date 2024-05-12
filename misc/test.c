@@ -8,8 +8,10 @@ int main() {
     // Example uint16_t value
     uint16_t value = TEST_LOW | TEST_HIGH;
 
+    char test[] = "hello";
+    
     // Print the string
-    printf("%u\n", value);
+    printf("String %12s\n", "string");
 
     return 0;
 }

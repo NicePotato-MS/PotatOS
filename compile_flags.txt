@@ -5,3 +5,4 @@
 -Istddef.h
 -Istdbool.h
 -std=c23
+-nostdlib
