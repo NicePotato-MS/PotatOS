@@ -34,7 +34,7 @@ static inline int __format_atoi(const char **str) {
 }
 
 #define __putchar(str)                                      \
-    if (putchar(str, putchar_args, sizeof(str)-1) == -1) {    \
+    if (putchar(str, putchar_args, sizeof(str)-1) == -1) {  \
         return -1;                                          \
     }
 
