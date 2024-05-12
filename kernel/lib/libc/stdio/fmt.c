@@ -22,9 +22,9 @@
 #define FLAGS_SIGNED 0b100000     // Signed value
 #define FLAGS_GROUPED 0b1000000  // Unused flag
 
-static inline int putchar_noop(void) { return 0; }
+int putchar_noop(void) { return 0; }
 
-static inline int __format_atoi(const char **str) {
+inline int __format_atoi(const char **str) {
     int val;
     for (val = 0; '0' <= **str && **str <= '9'; ++*str) {
         val *= 10;
@@ -52,7 +52,6 @@ static inline int __format_atoi(const char **str) {
 int format(void *in_putchar, void *putchar_args, const char* str_in, va_list va) {
     int (*putchar)(const char *, void *, size_t);
     putchar = in_putchar ? in_putchar : (void *)putchar_noop;
-
 
     const char *alphabet;
     unsigned int total_chars;
@@ -283,7 +282,7 @@ int format(void *in_putchar, void *putchar_args, const char* str_in, va_list va)
 
                 break;
             case 's':
-                void *str = va_arg(va, void *);
+                char *str = va_arg(va, char *);
                 if (!str) { str = "(null)"; }
 
                 len = (int)strlen(str);

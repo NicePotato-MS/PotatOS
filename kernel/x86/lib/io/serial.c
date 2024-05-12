@@ -10,17 +10,31 @@
 srl_Port srl_COM1 = {PORT_COM1, false};
 
 typedef struct {
-    srl_Port port;
+    srl_Port *port;
     size_t written;
 } serial_putchar_args;
 
 // Internal serial putchar function
-static int serial_putchar(const char *chars, serial_putchar_args *args, size_t size) {
+int __serial_putchar(const char *chars, serial_putchar_args *args, size_t size) {
     for (size_t chr = 0; chr < size; chr++) {
         srl_WriteByte(args->port, chars[chr]);
     }
     args->written += size;
     return 0;
+}
+
+/**
+ * Writes formatted string to Serial port with existing va_list
+ *
+ * @param port Serial port to write to
+ * @param str string to format
+ * @param va va_list
+ * @return amount of characters written
+ */
+int srl_WritefVarg(srl_Port *port, const char *str, va_list va) {
+    serial_putchar_args putchar_args = {port, 0};
+    format(__serial_putchar, &putchar_args, str, va);
+    return putchar_args.written;
 }
 
 /**
@@ -30,18 +44,15 @@ static int serial_putchar(const char *chars, serial_putchar_args *args, size_t s
  * @param str string to format
  * @return amount of characters written
  */
-int srl_Writef(srl_Port port, const char *str, ...) {
-    serial_putchar_args putchar_args = {port, 0};
-
-    va_list vars;
-    va_start(vars, str);
-    format(serial_putchar, &putchar_args, str, vars);
-    va_end(vars);
-
-    return putchar_args.written;
+int srl_Writef(srl_Port *port, const char *str, ...) {
+    va_list va;
+    va_start(va, str);
+    size_t written = srl_WritefVarg(port, str, va);
+    va_end(va);
+    return written;
 }
 
-bool srl_Init(srl_Port port, uint16_t divisor) {
+bool srl_Init(srl_Port *port, uint16_t divisor) {
     srl_SetInterruptEnabled(port, SRL_INTERRUPT_OFF);
     srl_SetDivisorUnsafe(port, divisor);
     srl_SetLineControlRegister(port,
@@ -59,6 +70,7 @@ bool srl_Init(srl_Port port, uint16_t divisor) {
     }
     // Serial port working
     srl_SetModemControlRegister(port, SRL_MODEM_ON);
+    port->initalized = true;
     return true;
 }
 

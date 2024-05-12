@@ -5,6 +5,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include <stdarg.h>
 
 #include <io.h>
 
@@ -120,53 +121,63 @@ typedef struct {
 extern srl_Port srl_COM1;
 
 // Set Interrupt Enabled Register of Serial port
-inline void srl_SetInterruptEnabled(srl_Port port, uint8_t state) {
-    outb(port.id + SRL_REG_INTERRUPT_ENABLE, state);
+inline void srl_SetInterruptEnabled(srl_Port *port, uint8_t state) {
+    outb(port->id + SRL_REG_INTERRUPT_ENABLE, state);
 }
 
 // Set Line Control Register of Serial port to state
-inline void srl_SetLineControlRegister(srl_Port port, uint8_t state) {
-    outb(port.id + SRL_REG_LINE_CONTROL, state);
+inline void srl_SetLineControlRegister(srl_Port *port, uint8_t state) {
+    outb(port->id + SRL_REG_LINE_CONTROL, state);
 }
 
 // Set First In / First Out Control Register of Serial port to state
-inline void srl_SetFIFOControlRegister(srl_Port port, uint8_t state) {
-    outb(port.id + SRL_REG_FIFO, state);
+inline void srl_SetFIFOControlRegister(srl_Port *port, uint8_t state) {
+    outb(port->id + SRL_REG_FIFO, state);
 }
 
 // Set Modem Control Register of Serial port to state
-inline void srl_SetModemControlRegister(srl_Port port, uint8_t state) {
-    outb(port.id + SRL_REG_MODEM_CONTROL, state);
+inline void srl_SetModemControlRegister(srl_Port *port, uint8_t state) {
+    outb(port->id + SRL_REG_MODEM_CONTROL, state);
 }
 
 // Set Divisor Value for Baud rate without preserving Line Control Register
-inline void srl_SetDivisorUnsafe(srl_Port port, uint16_t divisor) {
+inline void srl_SetDivisorUnsafe(srl_Port *port, uint16_t divisor) {
     srl_SetLineControlRegister(port, SRL_DLAB_ON);
-    outb(port.id + SRL_REG_DIV_LOW, divisor & 0xFF);
-    outb(port.id + SRL_REG_DIV_HIGH, (divisor >> 8) & 0xFF);
+    outb(port->id + SRL_REG_DIV_LOW, divisor & 0xFF);
+    outb(port->id + SRL_REG_DIV_HIGH, (divisor >> 8) & 0xFF);
 }
 
 // Set Divisor Value for Baud rate while preserving Line Control Register
-inline void srl_SetDivisorSafe(srl_Port port, uint16_t divisor) {
-    uint8_t lcr = inb(port.id + SRL_REG_LINE_CONTROL);
+inline void srl_SetDivisorSafe(srl_Port *port, uint16_t divisor) {
+    uint8_t lcr = inb(port->id + SRL_REG_LINE_CONTROL);
     srl_SetLineControlRegister(port, SRL_DLAB_ON);
-    outb(port.id + SRL_REG_DIV_LOW, divisor & 0xFF);
-    outb(port.id + SRL_REG_DIV_HIGH, (divisor >> 8) & 0xFF);
+    outb(port->id + SRL_REG_DIV_LOW, divisor & 0xFF);
+    outb(port->id + SRL_REG_DIV_HIGH, (divisor >> 8) & 0xFF);
     srl_SetLineControlRegister(port, lcr);
 }
 
 // Read a byte from a Serial port
-inline uint8_t srl_ReadByte(srl_Port port) { return inb(port.id); }
+inline uint8_t srl_ReadByte(srl_Port *port) { return inb(port->id); }
 
-inline void srl_TransmitYield(srl_Port port) {
-    while (!(inb(port.id + SRL_REG_LINE_STATUS) & SRL_TRANSMITTER_HOLDING_EMPTY));
+inline void srl_TransmitYield(srl_Port *port) {
+    while (!(inb(port->id + SRL_REG_LINE_STATUS) & SRL_TRANSMITTER_HOLDING_EMPTY));
 }
 
 // Write a byte to a Serial port
-inline void srl_WriteByte(srl_Port port, uint8_t data) {
+inline void srl_WriteByte(srl_Port *port, uint8_t data) {
     srl_TransmitYield(port); // This might be a bad idea
-    outb(port.id, data);
+    outb(port->id, data);
 }
+
+/**
+ * Writes formatted string to Serial port with existing va_list
+ *
+ * @param port Serial port to write to
+ * @param str string to format
+ * @param va va_list
+ * @return amount of characters written
+ */
+int srl_WritefVarg(srl_Port *port, const char *str, va_list va);
 
 /**
  * Writes formatted string to Serial port
@@ -175,12 +186,12 @@ inline void srl_WriteByte(srl_Port port, uint8_t data) {
  * @param str string to format
  * @return amount of characters written
  */
-int srl_Writef(srl_Port port, const char *str, ...);
+int srl_Writef(srl_Port *port, const char *str, ...);
 
 // Initialize Serial port with standard config and set Divisor Latch to divisor
 // for Baud rate
 // Returns if serial was initialized and working
-bool srl_Init(srl_Port port, uint16_t divisor);
+bool srl_Init(srl_Port *port, uint16_t divisor);
 
 #ifdef __cplusplus
 }

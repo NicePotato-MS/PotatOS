@@ -1,5 +1,21 @@
-#include <kernel.h>
+#include <stddef.h>
+#include <stdint.h>
 
-void panic(unsigned int exitcode) {
-    
+#include <kernel.h>
+#include <ansi.h>
+
+void panic(uint32_t errorcode) {
+    printk_panic("Kernel Panic!");
+    printk("%s%s%s", ANSI_RESET, ANSI_RED, ANSI_BOLD);
+    printk("Error code: %#08X\n", errorcode);
+    uint8_t category = errorcode;
+    uint8_t error = errorcode << 8;
+    if (category > KERNEL_ERROR_CATEGORIES ||
+    error > kernel_error_category_sizes[category]) {
+        category = KERNEL_ERROR_CATEGORY_MISC;
+        error = KERNEL_SUB_MISC_UNKNOWN;
+    }
+    printk("Category: %s\n", kernel_error_category_names[category]);
+    printk("Error: %s\n", kernel_error_categories[category][error]);
+    halt();
 }

@@ -2,3 +2,4 @@ KERNEL_MODULES += kernel/src
 KERNEL_MODULES += $(KRNLIB)/libc
 KERNEL_MODULES += $(KRNLIB)/kernel
 KERNEL_MODULES += $(KRNLIB)/graphics
+KERNEL_MODULES += $(KRNLIB)/misc
