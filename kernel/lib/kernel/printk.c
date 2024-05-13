@@ -17,12 +17,12 @@ void printk(const char *str, ...) {
 }
 
 void printk_ok(const char *str, ...) {
-    printk("%s[   OK] ", ANSI_BRIGHT_GREEN);
+    printk("%s[   OK] ", ANSI_BRIGHT_GREEN); // this
     va_list va;
     va_start(va, str);
     printk_varg(str, va);
     va_end(va);
-    //printk("%s\n", ANSI_RESET);
+    printk("%s\n", ANSI_RESET); // this
 }
 
 void printk_fail(const char *str, ...) {
