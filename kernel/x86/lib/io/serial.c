@@ -15,7 +15,7 @@ typedef struct {
 } serial_putchar_args;
 
 // Internal serial putchar function
-int __serial_putchar(const char *chars, serial_putchar_args *args, size_t size) {
+static int serial_putchar(const char *chars, serial_putchar_args *args, size_t size) {
     for (size_t chr = 0; chr < size; chr++) {
         srl_WriteByte(args->port, chars[chr]);
     }
@@ -33,7 +33,7 @@ int __serial_putchar(const char *chars, serial_putchar_args *args, size_t size) 
  */
 int srl_WritefVarg(srl_Port *port, const char *str, va_list va) {
     serial_putchar_args putchar_args = {port, 0};
-    format(__serial_putchar, &putchar_args, str, va);
+    format(serial_putchar, &putchar_args, str, va);
     return putchar_args.written;
 }
 

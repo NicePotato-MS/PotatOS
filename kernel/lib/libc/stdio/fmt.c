@@ -24,7 +24,7 @@
 
 int putchar_noop(void) { return 0; }
 
-inline int __format_atoi(const char **str) {
+inline int format_atoi(const char **str) {
     int val;
     for (val = 0; '0' <= **str && **str <= '9'; ++*str) {
         val *= 10;
@@ -33,7 +33,7 @@ inline int __format_atoi(const char **str) {
     return val;
 }
 
-#define __putchar(str)                                      \
+#define putstr(str)                                      \
     if (putchar(str, putchar_args, sizeof(str)-1) == -1) {  \
         return -1;                                          \
     }
@@ -97,7 +97,7 @@ int format(void *in_putchar, void *putchar_args, const char* str_in, va_list va)
         
         width = 0;
         if (isdigit(*str_in)) {
-            width = __format_atoi(&str_in);
+            width = format_atoi(&str_in);
         } else if (*str_in == '*') {
             width = va_arg(va, int);
             if (width < 0) {
@@ -248,9 +248,7 @@ int format(void *in_putchar, void *putchar_args, const char* str_in, va_list va)
                 }
                 if (!(flags & FLAGS_PAD_ZERO) && !(flags & FLAGS_LEFT_ALIGN)) {
                     if (len < width) {
-                        for (int i = 0; i < width - len; i++) {
-                            __putchar(" ");
-                        }
+                        for (int i = 0; i < width - len; i++) { putstr(" "); }
                     }
                 }
                 if (sign_character &&
@@ -258,25 +256,23 @@ int format(void *in_putchar, void *putchar_args, const char* str_in, va_list va)
                     return -1;
                 }
                 if (flags & FLAGS_ALTERNATE) {
-                    __putchar("0");
+                    putstr("0");
                     if (alternate_form_middle_char &&
                     putchar(&alternate_form_middle_char, putchar_args, 1) == -1) {
                         return -1;
                     }
                 }
-                for (size_t i = 0; i < padding_zeros; i++) { __putchar("0"); }
+                for (size_t i = 0; i < padding_zeros; i++) { putstr("0"); }
                 // Reverse buffer
                 for (int i = 0; i < total / 2; i++) {
                     char temp = buffer[i];
                     buffer[i] = buffer[total - i - 1];
                     buffer[total - i - 1] = temp;
                 }
-                __putchar(buffer);
+                putstr(buffer);
                 if (flags & FLAGS_LEFT_ALIGN) {
                     if (len < width) {
-                        for (int i = 0; i < width - len; i++) {
-                            __putchar(" ");
-                        }
+                        for (int i = 0; i < width - len; i++) { putstr(" "); }
                     }
                 }
 
@@ -288,21 +284,17 @@ int format(void *in_putchar, void *putchar_args, const char* str_in, va_list va)
                 len = (int)strlen(str);
                 
                 if (!(flags & FLAGS_LEFT_ALIGN)) {
-                    for (int i = 0; i < width - len; i++) {
-                        __putchar(" ");
-                    }
+                    for (int i = 0; i < width - len; i++) { putstr(" "); }
                 }
 
                 putchar(str, putchar_args, len);                
 
                 if (flags & FLAGS_LEFT_ALIGN) {
-                    for (int i = 0; i < width - len; i++) {
-                        __putchar(" ");
-                    }
+                    for (int i = 0; i < width - len; i++) { putstr(" "); }
                 }
                 break;
             case CONTROL_CHARACTER:
-                __putchar(CONTROL_CHARACTER_STR);
+                putstr(CONTROL_CHARACTER_STR);
                 break;
             default:
                 putchar(&str_in[-1], putchar_args, 1);
