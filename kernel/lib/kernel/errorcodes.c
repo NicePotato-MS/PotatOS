@@ -3,7 +3,7 @@
 #include <kernel.h>
 
 const char *category_misc[] = {
-    "Unknown Error"
+    "General Error"
 };
 
 const char *category_memory[] = {
@@ -21,6 +21,6 @@ const char *kernel_error_category_names[] = {
 };
 
 const uint16_t kernel_error_category_sizes[] = {
-    1,
-    1
+    0,
+    0
 };

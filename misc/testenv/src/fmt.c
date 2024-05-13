@@ -4,7 +4,9 @@
 #include <stdarg.h>
 #include <stdbool.h>
 #include <string.h>
+
 #include <ctype.h>
+#include <fmt.h>
 
 #define CONTROL_CHARACTER '%'
 #define CONTROL_CHARACTER_STR "%"
@@ -22,9 +24,9 @@
 #define FLAGS_SIGNED 0b100000     // Signed value
 #define FLAGS_GROUPED 0b1000000  // Unused flag
 
-static int putchar_noop(void) { return 0; }
+int putchar_noop(void) { return 0; }
 
-static int format_atoi(const char **str) {
+int format_atoi(const char **str) {
     int val;
     for (val = 0; '0' <= **str && **str <= '9'; ++*str) {
         val *= 10;
@@ -33,8 +35,16 @@ static int format_atoi(const char **str) {
     return val;
 }
 
-#define putone(chr) \
-    if (putchar(chr, putchar_args, 1) == -1) { return -1; }
+#define putone(chr)                                      \
+    if (putchar(chr, putchar_args, 1) == -1) {  \
+        return -1;                                          \
+    }
+
+inline size_t strlen(const char *str) {
+    const char *s;
+    for (s = str; *s; ++s);
+    return (s - str);
+}
 
 /**
  * Formats a string and outputs to an input putchar function
@@ -47,8 +57,7 @@ static int format_atoi(const char **str) {
  * @param va are arguments to replace type specifiers with
  * @return 0 if success or -1 if error
  */
-int format(
-    void *in_putchar, void *putchar_args, const char *str_in, va_list va) {
+int format(void *in_putchar, void *putchar_args, const char* str_in, va_list va) {
     int (*putchar)(const char *, void *, size_t);
     putchar = in_putchar ? in_putchar : (void *)putchar_noop;
 
@@ -57,7 +66,7 @@ int format(
     int flags, width;
     uint8_t log2base;
     uint64_t sign_bit;
-
+    
     while (*str_in) {
         if (*str_in != CONTROL_CHARACTER) {
             for (total_chars = 1; str_in[total_chars]; ++total_chars) {
@@ -72,16 +81,28 @@ int format(
         flags = FLAGS_NONE;
     gather_flags:
         switch (*str_in++) {
-            case '0': flags |= FLAGS_PAD_ZERO; goto gather_flags;
-            case '-': flags |= FLAGS_LEFT_ALIGN; goto gather_flags;
-            case '+': flags |= FLAGS_SHOW_SIGN; goto gather_flags;
-            case ' ': flags |= FLAGS_SPACE_SIGN; goto gather_flags;
-            case '#': flags |= FLAGS_ALTERNATE; goto gather_flags;
-            default: str_in--; break;
+            case '0':
+                flags |= FLAGS_PAD_ZERO;
+                goto gather_flags;
+            case '-':
+                flags |= FLAGS_LEFT_ALIGN;
+                goto gather_flags;
+            case '+':
+                flags |= FLAGS_SHOW_SIGN;
+                goto gather_flags;
+            case ' ':
+                flags |= FLAGS_SPACE_SIGN;
+                goto gather_flags;
+            case '#':
+                flags |= FLAGS_ALTERNATE;
+                goto gather_flags;
+            default:
+                str_in--;
+                break;
         }
 
         // flags
-
+        
         width = 0;
         if (isdigit(*str_in)) {
             width = format_atoi(&str_in);
@@ -95,7 +116,7 @@ int format(
         }
 
         // size
-
+        
         sign_bit = (1ul << 31);
         switch (*str_in) {
             case 'h':
@@ -108,13 +129,14 @@ int format(
                 }
                 break;
             case 'l':
-            case 't':  // ptrdiff_t
-            case 'z':  // size_t
-            case 'Z':  // size_t
+            case 't': // ptrdiff_t
+            case 'z': // size_t
+            case 'Z': // size_t
                 str_in++;
                 sign_bit = (1ul << 63);
                 break;
-            default: break;
+            default:
+                break;
         }
 
         // format
@@ -131,12 +153,16 @@ int format(
             case 'X':
                 alphabet = "0123456789ABCDEFPx";
                 // fallthrough
-            case 'x': log2base = 4; goto format_number;
+            case 'x':
+                log2base = 4;
+                goto format_number;
             case 'b':
                 alphabet = "0123456789abcdefpb";
                 log2base = 1;
                 goto format_number;
-            case 'o': log2base = 3; goto format_number;
+            case 'o':
+                log2base = 3;
+                goto format_number;
             case 'd':
             case 'i':
                 flags |= FLAGS_SIGNED;
@@ -157,8 +183,8 @@ int format(
                     if (value == sign_bit) {
                         negative = false;
                     } else {
-                        if (value & sign_bit) {  // If negative
-                            value = ~value + 1;  // Make positive
+                        if (value & sign_bit) { // If negative
+                            value = ~value + 1; // Make positive
                             value &= sign_bit | (sign_bit - 1);
                             negative = true;
                         }
@@ -170,6 +196,7 @@ int format(
                 char buffer[BUFFER_SIZE];
                 char alternate_form_middle_char, sign_character;
 
+                if (!value && log2base != 3) { flags &= FLAGS_ALTERNATE; }
                 if (value) {
                     do {
                         if (!log2base) {
@@ -186,10 +213,10 @@ int format(
 
                 int total = len;
                 unsigned int padding_zeros = 0;
-
+                
                 if (width && (flags & FLAGS_PAD_ZERO) &&
-                    (negative ||
-                        (flags & (FLAGS_SHOW_SIGN | FLAGS_SPACE_SIGN)))) {
+                (negative ||
+                (flags & (FLAGS_SHOW_SIGN | FLAGS_SPACE_SIGN)))) {
                     width--;
                 }
                 if ((flags & FLAGS_PAD_ZERO) && (len < width)) {
@@ -198,12 +225,12 @@ int format(
                 }
                 if (flags & FLAGS_ALTERNATE) {
                     if (!(log2base == 3) && len && len >= width &&
-                        (padding_zeros || buffer[len - 1] == '0')) {
+                    (padding_zeros || buffer[len - 1] == '0')) {
                         len--;
                         if (len < total) { total = len; }
                         if (padding_zeros) { padding_zeros--; }
                         if (len && (log2base == 4 || log2base == 1) &&
-                            (padding_zeros || buffer[len - 1] == '0')) {
+                        (padding_zeros || buffer[len - 1] == '0')) {
                             if (padding_zeros) { padding_zeros--; }
                             len--;
                             if (len < total) { total = len; }
@@ -233,14 +260,13 @@ int format(
                     }
                 }
                 if (sign_character &&
-                    putchar(&sign_character, putchar_args, 1) == -1) {
+                putchar(&sign_character, putchar_args, 1) == -1) {
                     return -1;
                 }
                 if (flags & FLAGS_ALTERNATE) {
                     putone("0");
                     if (alternate_form_middle_char &&
-                        putchar(&alternate_form_middle_char, putchar_args, 1) ==
-                            -1) {
+                    putchar(&alternate_form_middle_char, putchar_args, 1) == -1) {
                         return -1;
                     }
                 }
@@ -251,6 +277,7 @@ int format(
                     buffer[i] = buffer[total - i - 1];
                     buffer[total - i - 1] = temp;
                 }
+                printf("\n<%#x>\n", total);
                 putchar(buffer, putchar_args, total);
                 if (flags & FLAGS_LEFT_ALIGN) {
                     if (len < width) {
@@ -264,19 +291,24 @@ int format(
                 if (!str) { str = "(null)"; }
 
                 len = (int)strlen(str);
-
+                
                 if (!(flags & FLAGS_LEFT_ALIGN)) {
                     for (int i = 0; i < width - len; i++) { putone(" "); }
                 }
 
-                putchar(str, putchar_args, len);
+                printf("%#x\n", len);
+                putchar(str, putchar_args, len);                
 
                 if (flags & FLAGS_LEFT_ALIGN) {
                     for (int i = 0; i < width - len; i++) { putone(" "); }
                 }
                 break;
-            case CONTROL_CHARACTER: putone(CONTROL_CHARACTER_STR); break;
-            default: putchar(&str_in[-1], putchar_args, 1); break;
+            case CONTROL_CHARACTER:
+                putone(CONTROL_CHARACTER_STR);
+                break;
+            default:
+                putchar(&str_in[-1], putchar_args, 1);
+                break;
         }
     }
     return 0;

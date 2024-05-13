@@ -4,18 +4,18 @@
 #include <kernel.h>
 #include <ansi.h>
 
-void panic(uint32_t errorcode) {
-    printk_panic("Kernel Panic!");
-    printk("%s%s%s", ANSI_RESET, ANSI_RED, ANSI_BOLD);
-    printk("Error code: %#010X\n", errorcode);
-    uint8_t category = errorcode;
-    uint8_t error = errorcode << 8;
+void krn_Panic(uint32_t errorcode) {
+    krn_Printk_panic("Kernel Panic!");
+    krn_Printk("%s%s%s", ANSI_RESET, ANSI_RED, ANSI_BOLD);
+    krn_Printk("Error code: %#010X\n", errorcode);
+    uint16_t category = errorcode >> 16;
+    uint16_t error = errorcode;
     if (category > KERNEL_ERROR_CATEGORIES ||
     error > kernel_error_category_sizes[category]) {
-        category = KERNEL_ERRORCATEGORY_MISC;
-        error = KERNEL_ERROR_MISC_UNKNOWN;
+        krn_Printk("Category: ???\nError: ???\n");
+    } else {
+        krn_Printk("Category: %s\n", kernel_error_category_names[category]);
+        krn_Printk("Error: %s\n", kernel_error_categories[category][error]);
     }
-    printk("Category: %s\n", kernel_error_category_names[category]);
-    printk("Error: %s\n", kernel_error_categories[category][error]);
     halt();
 }

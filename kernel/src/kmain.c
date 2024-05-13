@@ -37,15 +37,11 @@ void _kmain(void) {
     uint32_t fb_height = framebuffer->height;
 
 
-    if (srl_Init(&srl_COM1, SRL_BAUD_38400)) {
-        srl_Writef(&srl_COM1, "Test1 %#010X\n", 0xFE);
-        printk_ok("Serial port COM1 initalized");
-        srl_Writef(&srl_COM1, "Test1 %#010X\n", 0xFE);
+    if (srl_Init(&srl_COM1, SRL_BAUD_115200)) {
+        krn_Printk_ok("Serial port COM1 initalized");
     } else {
-        printk_fail("Serial port COM1 failed to initalize");
+        krn_Printk_fail("Serial port COM1 failed to initalize");
     }
-    
-    panic(KERNEL_PANIC_UNKNOWN);
     
     for(size_t y = 0; y < fb_height; y++) {
         for(size_t x = 0; x < fb_width; x++) {
@@ -56,6 +52,8 @@ void _kmain(void) {
             fb_addr[((y * fb_pitch) / 4) + x] = (r<<16 | g<<8 | b);
         }
     }
+
+    krn_Panic(KERNEL_PANIC_GENERAL);
 
     halt();
 }
