@@ -20,9 +20,11 @@ include tools.mk
 -include arch/$(ARCH)/archinc.mk
 
 KERNEL_SRC_C += $(foreach module,$(KERNEL_MODULES),$(shell find $(module) -type f -name '*.c'))
+KERNEL_SRC_CPP += $(foreach module,$(KERNEL_MODULES),$(shell find $(module) -type f -name '*.cpp'))
 
-KERNEL_OBJ := $(addprefix kobj/,$(KERNEL_SRC_C:.c=.c.o) $(KERNEL_SRC_S:.S=.S.o))
-KERNEL_DEP := $(addprefix kobj/,$(KERNEL_SRC_C:.c=.c.d) $(KERNEL_SRC_S:.S=.S.d))
+
+KERNEL_OBJ := $(addprefix kobj/,$(KERNEL_SRC_C:.c=.c.o) $(KERNEL_SRC_S:.S=.S.o) $(KERNEL_SRC_CPP:.cpp=.cpp.o))
+KERNEL_DEP := $(addprefix kobj/,$(KERNEL_SRC_C:.c=.c.d) $(KERNEL_SRC_S:.S=.S.d) $(KERNEL_SRC_CPP:.cpp=.cpp.o))
 
 ifeq ($(LIMINE_CUSTOM),"false")
 LIMINE := limine
@@ -81,7 +83,6 @@ kbin/kernel.elf: $(KERNEL_OBJ)
         strip bin/kernel.elf; \
     fi
 
-# Compilation rules for *.c files.
 kobj/%.c.o: %.c
 	mkdir -p "$$(dirname $@)"
 	$(CROS_CC) $(CROS_KERNEL_CFLAGS) -c $< -o $@
@@ -89,7 +90,13 @@ kobj/%.c.o: %.c
 		$(CROS_CC) -S -fverbose-asm $(CROS_KERNEL_CFLAGS) -c $< -o $@.S; \
 	fi
 
-# Compilation rules for *.S files.
+kobj/%.cpp.o: %.cpp
+	mkdir -p "$$(dirname $@)"
+	$(CROS_CC) $(CROS_KERNEL_CFLAGS) -c $< -o $@
+	if [ "$(OUT_ASM)" = "true" ]; then \
+		$(CROS_CC) -S -fverbose-asm $(CROS_KERNEL_CFLAGS) -c $< -o $@.S; \
+	fi
+
 kobj/%.S.o: %.S
 	mkdir -p "$$(dirname $@)"
 	$(CROS_CC) $(CROS_KERNEL_CFLAGS) -c $< -o $@

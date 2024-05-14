@@ -1,8 +1,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <kernel.h>
-#include <ansi.h>
+#include <kernel.hpp>
+#include <ansi.hpp>
 
 void krn_Panic(uint32_t errorcode) {
     krn_Printk_panic("Kernel Panic!");

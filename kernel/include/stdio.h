@@ -1,11 +1,8 @@
 #pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stdint.h>
 #include <stdarg.h>
+#include <stddef.h>
 
 /**
  * Formats a string and outputs to an input putchar function
@@ -18,8 +15,5 @@ extern "C" {
  * @param va are arguments to replace type specifiers with
  * @return 0 if success or -1 if error
  */
-int format(void *in_putchar, void *putchar_args, const char* str_in, va_list va);
-
-#ifdef __cplusplus
-}
-#endif
+int format(int (*in_putchar)(const char *, void *, size_t), void *putchar_args,
+    const char *str_in, va_list va);

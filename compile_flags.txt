@@ -4,5 +4,5 @@
 -Istdint.h
 -Istddef.h
 -Istdbool.h
--std=c23
 -nostdlib
+-mgeneral-regs-only

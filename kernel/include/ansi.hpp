@@ -1,9 +1,5 @@
 #pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 extern const char ANSI_RESET[];
 extern const char ANSI_BOLD[];
 extern const char ANSI_DIM[];
@@ -47,7 +43,3 @@ extern const char ANSI_BG_BRIGHT_BLUE[];
 extern const char ANSI_BG_BRIGHT_MAGENTA[];
 extern const char ANSI_BG_BRIGHT_CYAN[];
 extern const char ANSI_BG_BRIGHT_WHITE[];
-
-#ifdef __cplusplus
-}
-#endif

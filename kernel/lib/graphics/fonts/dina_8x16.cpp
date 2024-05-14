@@ -1,7 +1,7 @@
 #include <stdint.h>
-#include <text.h>
+#include <text.hpp>
 
-#include <fonts/dina_8x16.h>
+#include <fonts/dina_8x16.hpp>
 
 #define FONT_SIZE_X 8
 #define FONT_SIZE_Y 16

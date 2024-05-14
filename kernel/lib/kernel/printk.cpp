@@ -1,8 +1,8 @@
 #include <stdint.h>
 
-#include <kernel.h>
-#include <serial.h>
-#include <ansi.h>
+#include <kernel.hpp>
+#include <serial.hpp>
+#include <ansi.hpp>
 
 
 void krn_Printk_varg(const char *str, va_list va) {

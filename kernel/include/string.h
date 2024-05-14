@@ -1,9 +1,5 @@
 #pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stddef.h>
 
 /* Copy n bytes from src to dest */
@@ -20,7 +16,3 @@ inline size_t strlen(const char *str) {
     for (s = str; *s; ++s);
     return (s - str);
 }
-
-#ifdef __cplusplus
-}
-#endif

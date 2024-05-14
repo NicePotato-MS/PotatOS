@@ -1,11 +1,11 @@
 #pragma once
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #include <stdint.h>
+
+#define KERNEL_VERSION_MAJOR 0
+#define KERNEL_VERSION_MINOR 1
+#define KERNEL_VERSION_PATCH 0
+
 
 #define KERNEL_ERROR_CATEGORIES 2
 
@@ -35,7 +35,3 @@ void krn_Printk_info(const char *str, ...);
 void krn_Printk_warn(const char *str, ...);
 void krn_Printk_error(const char *str, ...);
 void krn_Printk_panic(const char *str, ...);
-
-#ifdef __cplusplus
-}
-#endif

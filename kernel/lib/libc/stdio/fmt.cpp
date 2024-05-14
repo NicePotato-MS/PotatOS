@@ -22,7 +22,7 @@
 #define FLAGS_SIGNED 0b100000     // Signed value
 #define FLAGS_GROUPED 0b1000000  // Unused flag
 
-static int putchar_noop(void) { return 0; }
+static int putchar_noop(const char *, void *, size_t) { return 0; }
 
 static int format_atoi(const char **str) {
     int val;
@@ -47,16 +47,18 @@ static int format_atoi(const char **str) {
  * @param va are arguments to replace type specifiers with
  * @return 0 if success or -1 if error
  */
-int format(
-    void *in_putchar, void *putchar_args, const char *str_in, va_list va) {
+int format(int (*in_putchar)(const char *, void *, size_t),
+    void *putchar_args, const char *str_in, va_list va) {
     int (*putchar)(const char *, void *, size_t);
-    putchar = in_putchar ? in_putchar : (void *)putchar_noop;
+    putchar = in_putchar ? in_putchar : putchar_noop;
 
     const char *alphabet;
     unsigned int total_chars;
     int flags, width;
     uint8_t log2base;
     uint64_t sign_bit;
+
+    char *str;
 
     while (*str_in) {
         if (*str_in != CONTROL_CHARACTER) {
@@ -122,6 +124,13 @@ int format(
         alphabet = "0123456789abcdefpx";
         log2base = 0;
 
+        bool negative;
+        int total;
+        unsigned int padding_zeros;
+        int len;
+
+        char null_str[] = "(null)";
+
         switch (*str_in++) {
             case 'p':
                 flags |= FLAGS_ALTERNATE;
@@ -152,7 +161,7 @@ int format(
                     flags &= ~(FLAGS_SHOW_SIGN | FLAGS_SPACE_SIGN);
                 }
 
-                bool negative = false;
+                negative = false;
                 if (flags & FLAGS_SIGNED) {
                     if (value == sign_bit) {
                         negative = false;
@@ -165,7 +174,7 @@ int format(
                     }
                 }
 
-                int len = 0;
+                len = 0;
                 unsigned int digit;
                 char buffer[BUFFER_SIZE];
                 char alternate_form_middle_char, sign_character;
@@ -182,10 +191,12 @@ int format(
                         }
                         buffer[len++] = alphabet[digit];
                     } while (value);
+                } else {
+                    buffer[len++] = '0';
                 }
 
-                int total = len;
-                unsigned int padding_zeros = 0;
+                total = len;
+                padding_zeros = 0;
 
                 if (width && (flags & FLAGS_PAD_ZERO) &&
                     (negative ||
@@ -260,8 +271,8 @@ int format(
 
                 break;
             case 's':
-                char *str = va_arg(va, char *);
-                if (!str) { str = "(null)"; }
+                str = va_arg(va, char *);
+                if (!str) { str = null_str; }
 
                 len = (int)strlen(str);
 

@@ -1,13 +1,9 @@
 #pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stdint.h>
 #include <stdarg.h>
 
-#include <io.h>
+#include <io.hpp>
 
 #define PORT_COM1 0x3F8  // Serial Port 1
 #define PORT_COM2 0x2F8  // Serial Port 2
@@ -192,7 +188,3 @@ int srl_Writef(srl_Port *port, const char *str, ...);
 // for Baud rate
 // Returns if serial was initialized and working
 bool srl_Init(srl_Port *port, uint16_t divisor);
-
-#ifdef __cplusplus
-}
-#endif

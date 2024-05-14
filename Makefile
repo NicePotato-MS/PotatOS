@@ -15,6 +15,7 @@ MKBUILD = make -f build.mk iso DEBUG=$(DEBUG) ARCH=$(ARCH) OUT_ASM=$(OUT_ASM) LI
 .PHONY: run
 run: iso
 # Note that boot order below is not just cd, it's c (hdd), d (cd)
+	@echo
 	qemu-system-x86_64 -serial stdio -boot order=cd -cdrom build/potatos-$(ARCH).iso -m $(M)M -D ./log.txt
 
 .PHONY: iso

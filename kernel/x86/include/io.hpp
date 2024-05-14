@@ -1,9 +1,5 @@
 #pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -39,7 +35,3 @@ inline uint32_t inl(uint16_t port) {
 }
 
 inline void io_Wait() { outb(0x80, 0); }
-
-#ifdef __cplusplus
-}
-#endif

@@ -1,11 +1,10 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include <stdbool.h>
 #include <stdarg.h>
 #include <stdio.h>
 
-#include <serial.h>
+#include <serial.hpp>
 
 srl_Port srl_COM1 = {PORT_COM1, false};
 
@@ -15,7 +14,8 @@ typedef struct {
 } serial_putchar_args;
 
 // Internal serial putchar function
-static int serial_putchar(const char *chars, serial_putchar_args *args, size_t size) {
+static int serial_putchar(const char *chars, void *args_void, size_t size) {
+    serial_putchar_args* args = static_cast<serial_putchar_args *>(args_void);
     for (size_t chr = 0; chr < size; chr++) {
         srl_WriteByte(args->port, chars[chr]);
     }

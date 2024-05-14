@@ -1,6 +1,6 @@
 #include <stdint.h>
 
-#include <kernel.h>
+#include <kernel.hpp>
 
 const char *category_misc[] = {
     "General Error"
