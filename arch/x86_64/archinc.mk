@@ -9,7 +9,8 @@ CROS_KERNEL_CFLAGS += \
 	-mgeneral-regs-only \
     -mno-red-zone \
     -Ilimine \
-	-Ikernel/x86/include
+	-Ikernel/x86/include \
+	-Iarch/$(ARCH)/include
 
 CROS_LDFLAGS += \
     -m elf_x86_64 \

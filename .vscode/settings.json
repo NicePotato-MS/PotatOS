@@ -7,5 +7,9 @@
         "string": "cpp",
         "string_view": "cpp"
     },
-    "C_Cpp.default.compilerPath": "/home/xubuntu/Documents/PotatOS_Try2/tools/x86_64/bin/x86_64-elf-gcc"
+    "C_Cpp.default.compilerPath": "/home/xubuntu/Documents/PotatOS_Try2/tools/x86_64/bin/x86_64-elf-gcc",
+    "makefile.makefilePath": "Makefile",
+    "C_Cpp.default.intelliSenseMode": "clang-x64",
+    "C_Cpp.default.compileCommands": "compile_commands.json",
+    "C_Cpp.formatting": "clangFormat"
 }

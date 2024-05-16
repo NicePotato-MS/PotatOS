@@ -21,7 +21,7 @@ include tools.mk
 
 KERNEL_SRC_C += $(foreach module,$(KERNEL_MODULES),$(shell find $(module) -type f -name '*.c'))
 KERNEL_SRC_CPP += $(foreach module,$(KERNEL_MODULES),$(shell find $(module) -type f -name '*.cpp'))
-
+KERNEL_SRC_S += $(foreach module,$(KERNEL_MODULES),$(shell find $(module) -type f -name '*.S'))
 
 KERNEL_OBJ := $(addprefix kobj/,$(KERNEL_SRC_C:.c=.c.o) $(KERNEL_SRC_S:.S=.S.o) $(KERNEL_SRC_CPP:.cpp=.cpp.o))
 KERNEL_DEP := $(addprefix kobj/,$(KERNEL_SRC_C:.c=.c.d) $(KERNEL_SRC_S:.S=.S.d) $(KERNEL_SRC_CPP:.cpp=.cpp.o))

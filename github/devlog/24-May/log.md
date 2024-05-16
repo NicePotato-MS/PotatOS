@@ -6,3 +6,8 @@ Floating point numbers are broken since you need to enable some stuff first.
 Disable cpu extensions or do what I said above.
 
 Pretty gradient
+
+# May 16 2024
+
+I hate devlogs
+I did stuff in the past while, but I don't have it written!

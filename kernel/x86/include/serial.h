@@ -3,16 +3,16 @@
 #include <stdint.h>
 #include <stdarg.h>
 
-#include <io.hpp>
+#include <io.h>
 
-#define PORT_COM1 0x3F8  // Serial Port 1
-#define PORT_COM2 0x2F8  // Serial Port 2
-#define PORT_COM3 0x3E8  // Serial Port 3
-#define PORT_COM4 0x2E8  // Serial Port 4
-#define PORT_COM5 0x5F8  // Serial Port 5
-#define PORT_COM6 0x4F8  // Serial Port 6
-#define PORT_COM7 0x5E8  // Serial Port 7
-#define PORT_COM8 0x4E8  // Serial Port 8
+#define SRL_PORT_COM1 0x3F8  // Serial Port 1
+#define SRL_PORT_COM2 0x2F8  // Serial Port 2
+#define SRL_PORT_COM3 0x3E8  // Serial Port 3
+#define SRL_PORT_COM4 0x2E8  // Serial Port 4
+#define SRL_PORT_COM5 0x5F8  // Serial Port 5
+#define SRL_PORT_COM6 0x4F8  // Serial Port 6
+#define SRL_PORT_COM7 0x5E8  // Serial Port 7
+#define SRL_PORT_COM8 0x4E8  // Serial Port 8
 
 #define SRL_REG_DATA 0              // Data Register offset
 #define SRL_REG_INTERRUPT_ENABLE 1  // Interrupt Enable Register offset
@@ -109,82 +109,77 @@
 #define SRL_FIFO_ENABLED_UNUSABLE 0b01 << 6  // FIFO Enabled but Unusable
 #define SRL_FIFO_ENABLED 0b10 << 6           // FIFO Enabled
 
-typedef struct {
-    uint16_t id;
-    bool initalized;
-} srl_Port;
 
-extern srl_Port srl_COM1;
 
-// Set Interrupt Enabled Register of Serial port
-inline void srl_SetInterruptEnabled(srl_Port *port, uint8_t state) {
-    outb(port->id + SRL_REG_INTERRUPT_ENABLE, state);
-}
+class SerialPort {
+   public:
+    uint16_t port_id;
+    bool initialized;
 
-// Set Line Control Register of Serial port to state
-inline void srl_SetLineControlRegister(srl_Port *port, uint8_t state) {
-    outb(port->id + SRL_REG_LINE_CONTROL, state);
-}
+    inline void SetInterruptEnabled(uint8_t state) {
+        io::outb(port_id + SRL_REG_INTERRUPT_ENABLE, state);
+    }
 
-// Set First In / First Out Control Register of Serial port to state
-inline void srl_SetFIFOControlRegister(srl_Port *port, uint8_t state) {
-    outb(port->id + SRL_REG_FIFO, state);
-}
+    inline void SetLineControlRegister(uint8_t state) {
+        io::outb(port_id + SRL_REG_LINE_CONTROL, state);
+    }
 
-// Set Modem Control Register of Serial port to state
-inline void srl_SetModemControlRegister(srl_Port *port, uint8_t state) {
-    outb(port->id + SRL_REG_MODEM_CONTROL, state);
-}
+    inline void SetFIFOControlRegister(uint8_t state) {
+        io::outb(port_id + SRL_REG_FIFO, state);
+    }
 
-// Set Divisor Value for Baud rate without preserving Line Control Register
-inline void srl_SetDivisorUnsafe(srl_Port *port, uint16_t divisor) {
-    srl_SetLineControlRegister(port, SRL_DLAB_ON);
-    outb(port->id + SRL_REG_DIV_LOW, divisor & 0xFF);
-    outb(port->id + SRL_REG_DIV_HIGH, (divisor >> 8) & 0xFF);
-}
+    inline void SetModemControlRegister(uint8_t state) {
+        io::outb(port_id + SRL_REG_MODEM_CONTROL, state);
+    }
 
-// Set Divisor Value for Baud rate while preserving Line Control Register
-inline void srl_SetDivisorSafe(srl_Port *port, uint16_t divisor) {
-    uint8_t lcr = inb(port->id + SRL_REG_LINE_CONTROL);
-    srl_SetLineControlRegister(port, SRL_DLAB_ON);
-    outb(port->id + SRL_REG_DIV_LOW, divisor & 0xFF);
-    outb(port->id + SRL_REG_DIV_HIGH, (divisor >> 8) & 0xFF);
-    srl_SetLineControlRegister(port, lcr);
-}
+    inline void SetDivisorUnsafe(uint16_t divisor) {
+        SetLineControlRegister(SRL_DLAB_ON);
+        io::outb(port_id + SRL_REG_DIV_LOW, divisor & 0xFF);
+        io::outb(port_id + SRL_REG_DIV_HIGH, (divisor >> 8) & 0xFF);
+    }
 
-// Read a byte from a Serial port
-inline uint8_t srl_ReadByte(srl_Port *port) { return inb(port->id); }
+    inline void SetDivisorSafe(uint16_t divisor) {
+        uint8_t lcr = io::inb(port_id + SRL_REG_LINE_CONTROL);
+        SetLineControlRegister(SRL_DLAB_ON);
+        io::outb(port_id + SRL_REG_DIV_LOW, divisor & 0xFF);
+        io::outb(port_id + SRL_REG_DIV_HIGH, (divisor >> 8) & 0xFF);
+        SetLineControlRegister(lcr);
+    }
 
-inline void srl_TransmitYield(srl_Port *port) {
-    while (!(inb(port->id + SRL_REG_LINE_STATUS) & SRL_TRANSMITTER_HOLDING_EMPTY));
-}
+    inline uint8_t ReadByte() { return io::inb(port_id); }
 
-// Write a byte to a Serial port
-inline void srl_WriteByte(srl_Port *port, uint8_t data) {
-    srl_TransmitYield(port); // This might be a bad idea
-    outb(port->id, data);
-}
+    inline void TransmitYield() {
+        while (!(io::inb(port_id + SRL_REG_LINE_STATUS) &
+                 SRL_TRANSMITTER_HOLDING_EMPTY));
+    }
 
-/**
- * Writes formatted string to Serial port with existing va_list
- *
- * @param port Serial port to write to
- * @param str string to format
- * @param va va_list
- * @return amount of characters written
- */
-int srl_WritefVarg(srl_Port *port, const char *str, va_list va);
+    // Write a byte to a Serial port
+    inline void WriteByte(uint8_t data) {
+        TransmitYield();  // This might be a bad idea
+        io::outb(port_id, data);
+    }
 
-/**
- * Writes formatted string to Serial port
- *
- * @param port Serial port to write to
- * @param str string to format
- * @return amount of characters written
- */
-int srl_Writef(srl_Port *port, const char *str, ...);
+    /**
+     * Writes formatted string to Serial port with existing va_list
+     *
+     * @param str string to format
+     * @param va va_list
+     * @return amount of characters written
+     */
+    int WritefVarg(const char *str, va_list va);
 
-// Initialize Serial port with standard config and set Divisor Latch to divisor
-// for Baud rate
-// Returns if serial was initialized and working
-bool srl_Init(srl_Port *port, uint16_t divisor);
+    /**
+     * Writes formatted string to Serial port
+     *
+     * @param port Serial port to write to
+     * @param str string to format
+     * @return amount of characters written
+     */
+    int Writef(const char *str, ...);
+
+    // Initialize Serial port with standard config and set Divisor Latch to
+    // divisor for Baud rate Returns if serial was initialized and working
+    bool Init(uint16_t port, uint16_t divisor);
+};
+
+extern SerialPort COM1;

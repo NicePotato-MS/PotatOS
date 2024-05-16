@@ -8,11 +8,14 @@ CROS_KERNEL_CFLAGS := \
 	-O2 \
 	-Ikernel/include
 
+
+
 CROS_LD := tools/$(ARCH)/bin/$(ARCH)-elf-ld
 CROS_LDFLAGS := \
     -nostdlib \
     -z max-page-size=0x1000 \
 	-gc-sections
 
-HOST_CC := cc
-HOST_CFLAGS := -g -O2 
+ifeq ($(DEBUG), true)
+CROS_KERNEL_CFLAGS += -DDEBUG
+endif

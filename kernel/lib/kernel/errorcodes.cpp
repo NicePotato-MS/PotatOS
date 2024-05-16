@@ -1,9 +1,9 @@
 #include <stdint.h>
 
-#include <kernel.hpp>
+#include <kernel.h>
 
 const char *category_misc[] = {
-    "General Error"
+    "Operation completed successfully"
 };
 
 const char *category_memory[] = {

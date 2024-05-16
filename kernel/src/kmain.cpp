@@ -4,20 +4,22 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <serial.hpp>
-#include <kernel.hpp>
-#include <interrupts.hpp>
+#include <serial.h>
+#include <kernel.h>
+#include <interrupts.h>
 #include <limine.h>
-#include <text.hpp>
-#include <ansi.hpp>
+#include <text.h>
+#include <ansi.h>
+#include <arch.h>
 
-#include <fonts/dina_8x16.hpp>
+#include <fonts/dina_8x16.h>
 
 LIMINE_BASE_REVISION(2)
 
 struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST,
-    .revision = 0
+    .revision = 0,
+    .response = NULL
 };
 
 void _kmain_cpp() {
@@ -25,19 +27,10 @@ void _kmain_cpp() {
         halt();
     }
 
-    bool serial_initialized = srl_Init(&srl_COM1, SRL_BAUD_115200);
-
-    krn_Printk("PotatOS Kernel Version %u.%u.%u\n", KERNEL_VERSION_MAJOR,
+    krnl::Printf("PotatOS Kernel Version %u.%u.%u\n", KERNEL_VERSION_MAJOR,
         KERNEL_VERSION_MINOR, KERNEL_VERSION_PATCH);
 
-    if (serial_initialized) {
-        krn_Printk_ok("Serial port COM1 initalized");
-    } else {
-        krn_Printk_fail("Serial port COM1 failed to initalize");
-    }
-
-    idt_Init();
-    krn_Printk_ok("IDT Initialized");
+    arch::Setup();
 
     if (framebuffer_request.response == NULL ||
         framebuffer_request.response->framebuffer_count < 1) {
@@ -61,10 +54,8 @@ void _kmain_cpp() {
         }
     }
 
-    __asm__("sti");
-
     while (true) {
-        //__asm__("int $0x1");
+        __asm__("int $0x1");
     }
 }
 

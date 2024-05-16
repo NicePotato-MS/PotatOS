@@ -1,4 +1,4 @@
-#include <ansi.hpp>
+#include <ansi.h>
 
 // Text styles
 const char ANSI_RESET[] = "\033[0m";
