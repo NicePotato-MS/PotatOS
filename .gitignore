@@ -7,7 +7,8 @@ obj
 tools
 limine-test
 
-.cache
-
 *.o
 *.elf
+
+.cache
+compile_commands.json

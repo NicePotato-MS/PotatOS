@@ -1,5 +1,10 @@
 #pragma once
 
+#define ANSI_PARSE_MODE_ESC 0 // Search for escape character
+#define ANSI_PARSE_MODE_INTRODUCER 1  // Search for introducer (usually '[')
+#define ANSI_PARSE_MODE_CSI_COMMAND 2 // Absorb commands
+
+
 extern const char ANSI_RESET[];
 extern const char ANSI_BOLD[];
 extern const char ANSI_DIM[];

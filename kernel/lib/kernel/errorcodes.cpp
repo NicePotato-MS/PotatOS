@@ -1,26 +1,30 @@
+#include <kernel.h>
 #include <stdint.h>
 
-#include <kernel.h>
-
 const char *category_misc[] = {
-    "Operation completed successfully"
+    "Operation completed successfully",
+    "Bootloader Unsupported (Make sure to use limine)",
+    "Unknown Error"
 };
 
-const char *category_memory[] = {
-    "Page Fault"
-};
+const char *category_memory[] = {"Page Fault", "Segmentation Fault"};
 
-const char **kernel_error_categories[] = {
-    category_misc,
-    category_memory
-};
+const char *category_interrupt[] = {
+    "Unhandled Interrupt", "General Protection"};
+
+const char *category_math[] = {"Division by Zero"};
+
+const char *category_execution[] = {"Invalid Opcode"};
+
+const char **kernel_error_categories[] = {category_misc, category_memory,
+    category_interrupt, category_math, category_execution};
 
 const char *kernel_error_category_names[] = {
-    "Misc",
-    "Memory"
-};
+    "Misc", "Memory", "Interrupt", "Math", "Execution"};
+
+#define SIZEOF_PTR_ARR(x) sizeof(x) / sizeof(uintptr_t)
 
 const uint16_t kernel_error_category_sizes[] = {
-    0,
-    0
-};
+    SIZEOF_PTR_ARR(category_misc) - 1, SIZEOF_PTR_ARR(category_memory) - 1,
+    SIZEOF_PTR_ARR(category_interrupt) - 1, SIZEOF_PTR_ARR(category_math) - 1,
+    SIZEOF_PTR_ARR(category_execution) - 1};

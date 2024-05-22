@@ -8,7 +8,7 @@ LIMINE_CUSTOM ?= false
 # LIMINE_CUSTOM will use a custom version of limine not included in the repo
 # My custom-ish version has a modified source to skip a sanity check.
 
-M ?= 512
+M ?= 64
 
 MKBUILD = make -f build.mk iso DEBUG=$(DEBUG) ARCH=$(ARCH) OUT_ASM=$(OUT_ASM) LIMINE_CUSTOM=$(LIMINE_CUSTOM)
 
