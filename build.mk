@@ -39,9 +39,6 @@ iso: errorcheck fullclean kbin/kernel.elf
 	cp kbin/kernel.elf limine.cfg $(LIMINE)/limine-bios.sys \
     	$(LIMINE)/limine-bios-cd.bin $(LIMINE)/limine-uefi-cd.bin isoroot/
 	mkdir -p isoroot/EFI/BOOT
-	if [ "$(DEBUG)" = "false" ]; then \
-        strip kbin/kernel.elf; \
-    fi
 
 	
 	if [ "$(ARCH)" = "x86_64" ] || [ "$(ARCH)" = "i686" ]; then \
@@ -80,7 +77,7 @@ kbin/kernel.elf: $(KERNEL_OBJ)
 	mkdir -p "$$(dirname $@)"
 	$(CROS_LD) $(KERNEL_OBJ) $(CROS_LDFLAGS) -o $@
 	if [ "$(DEBUG)" = "false" ]; then \
-        strip bin/kernel.elf; \
+        strip kbin/kernel.elf; \
     fi
 
 kobj/%.c.o: %.c

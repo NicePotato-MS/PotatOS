@@ -130,10 +130,10 @@ void tty::Terminal::MoveCursorYScroll(int amount) {
     }
 }
 
-void tty::Terminal::Putchar(const char *chr) {
-    if (ANSI_SkipOrParseCheck(*chr)) {
+void tty::Terminal::Putchar(const char chr) {
+    if (ANSI_SkipOrParseCheck(chr)) {
         size_t buffer_index;
-        switch (*chr) {
+        switch (chr) {
             case '\b':
                 if (x > 0) {
                     x--;
@@ -155,9 +155,9 @@ void tty::Terminal::Putchar(const char *chr) {
             case '\r': x = 0; break;
             default:
                 fb.DrawGlyphNoClip(
-                    x * font.size_x, y * font.size_y, *chr, bg, fg);
+                    x * font.size_x, y * font.size_y, chr, bg, fg);
                 buffer_index = y * size_x + x;
-                buffer_text[buffer_index] = (uint8_t)(*chr);
+                buffer_text[buffer_index] = (uint8_t)(chr);
                 buffer_bg[buffer_index] = bg;
                 buffer_fg[buffer_index] = fg;
 
@@ -326,11 +326,11 @@ bool tty::Terminal::ANSI_SkipOrParseCheck(uint8_t chr) {
 }
 
 void tty::Terminal::Putchar(const char *chr, size_t size) {
-    while (size--) { Putchar(chr++); }
+    while (size--) { Putchar(*chr++); }
 }
 
 static int putchar(const char *chr, void * args, size_t size) {
-    while (size--) { static_cast<tty::Terminal *>(args)->Putchar(chr++); }
+    while (size--) { static_cast<tty::Terminal *>(args)->Putchar(*chr++); }
     return 0;
 }
 
@@ -345,10 +345,11 @@ void tty::Terminal::ClearScreen() {
     memset(fb.vram, 0, (fb.width * fb.height) + (fb.pitch * fb.height / sizeof(fb.vram[0])));
 }
 
-void tty::Terminal::Init(Framebuffer in_fb, bitmap_font in_font, bitmap_font in_font_bold, uint32_t *in_palette, uint8_t *in_buffer_text,
+bool tty::Terminal::Init(Framebuffer in_fb, bitmap_font in_font, bitmap_font in_font_bold, uint32_t *in_palette, uint8_t *in_buffer_text,
    uint32_t *in_buffer_bg, uint32_t *in_buffer_fg) {
     if (in_fb.vram == NULL) {
         initialized = false;
+        return false;
     } else {
         fb = in_fb;
         x = 0;
@@ -368,6 +369,7 @@ void tty::Terminal::Init(Framebuffer in_fb, bitmap_font in_font, bitmap_font in_
         ansi_mode = ANSI_PARSE_MODE_ESC;
         bold = false;
         initialized = true;
+        return true;
     }
 }
 

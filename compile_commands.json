@@ -618,5 +618,36 @@
    "kobj/kernel/lib/graphics/fonts/dina_bold_7x16.cpp.o"
   ],
   "file": "kernel/lib/graphics/fonts/dina_bold_7x16.cpp"
+ },
+ {
+  "directory": "/home/xubuntu/Documents/PotatOS_Try2",
+  "arguments": [
+   "tools/x86_64/bin/x86_64-elf-gcc",
+   "-Wall",
+   "-Wextra",
+   "-Wshadow",
+   "-Wvla",
+   "-g",
+   "-O2",
+   "-Ikernel/include",
+   "-DDEBUG",
+   "-ffreestanding",
+   "-fno-stack-protector",
+   "-fno-stack-check",
+   "-fno-lto",
+   "-fPIE",
+   "-m64",
+   "-march=x86-64",
+   "-mgeneral-regs-only",
+   "-mno-red-zone",
+   "-Ilimine",
+   "-Ikernel/x86/include",
+   "-Iarch/x86_64/include",
+   "-c",
+   "arch/x86_64/kernel/lib/kernel/pic.cpp",
+   "-o",
+   "kobj/arch/x86_64/kernel/lib/kernel/pic.cpp.o"
+  ],
+  "file": "arch/x86_64/kernel/lib/kernel/pic.cpp"
  }
 ]

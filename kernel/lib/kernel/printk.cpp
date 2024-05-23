@@ -8,22 +8,45 @@
 #include <io.h>
 
 #ifdef DEBUG
-static int debug_putchar(const char *chars, void *, size_t size) {
+static int putchar_dbg_noterm(const char *chars, void *, size_t size) {
     while (size--) {
-        io::outb(0xE9, *chars++);
+        io::outb(0xE9, *chars);
+        chars++;
+    }
+    return 0;
+}
+
+static int putchar_dbg(const char *chars, void *, size_t size) {
+    while (size--) {
+        io::outb(0xE9, *chars);
+        tty::tty1.Putchar((uint8_t)*chars);
+        chars++;
+    }
+    return 0;
+}
+#else
+static int putchar(const char *chars, void *, size_t size) {
+    while (size--) {
+        tty::tty1.Putchar((uint8_t)*chars);
+        chars++;
     }
     return 0;
 }
 #endif
 
 void krnl::Printf(const char *str, va_list va) {
-    #ifdef DEBUG
-    // Print to debug port
-    format(debug_putchar, NULL, str, va);
-#endif
-    //if (tty::tty1.initialized) {
-        //tty::tty1.Printf(str);
-    //}
+    if (tty::tty1.initialized) {
+        #ifdef DEBUG
+        format(putchar_dbg, NULL, str, va);
+        #else
+        format(putchar, NULL, str, va);
+        #endif
+    } else {
+        #ifdef DEBUG
+        format(putchar_dbg_noterm, NULL, str, va);
+        #endif
+    }
+    
 }
 
 void krnl::Printf(const char *str, ...) {

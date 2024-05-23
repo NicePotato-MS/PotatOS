@@ -49,7 +49,7 @@ namespace tty {
         uint32_t *buffer_bg;
         uint32_t *buffer_fg;
 
-        void Putchar(const char *chr);
+        void Putchar(const char chr);
         void Putchar(const char *chr, size_t size);
 
         void Printf(const char *str, ...);
@@ -67,7 +67,7 @@ namespace tty {
 
         void ClearScreen();
 
-        void Init(Framebuffer in_fb, bitmap_font in_font, bitmap_font in_font_bold,
+        bool Init(Framebuffer in_fb, bitmap_font in_font, bitmap_font in_font_bold,
             uint32_t *in_palette, uint8_t *in_buffer_text, uint32_t *in_buffer_bg,
             uint32_t *in_buffer_fg);
 
