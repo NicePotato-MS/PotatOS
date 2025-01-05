@@ -1,5 +1,5 @@
 # PotatOS - a potato operating system for potato computers
-# Created by NicePotato 2022-2023
+# Created by NicePotato 2022-2024
 
 ARCH ?= x86_64
 DEBUG ?= true
@@ -13,14 +13,16 @@ M ?= 32
 MKBUILD = make -f build.mk iso DEBUG=$(DEBUG) ARCH=$(ARCH) OUT_ASM=$(OUT_ASM) LIMINE_CUSTOM=$(LIMINE_CUSTOM)
 
 .PHONY: iso
-iso: clean
+iso:
+	make -f download-tools.mk ARCH=$(ARCH)
 	compiledb $(MKBUILD)
 
+.PHONY: download-tools
+download-tools:
+	make -f download-tools.mk ARCH=$(ARCH) FORCE=true
+
 .PHONY: run
-run: iso
-# Note that boot order below is not just cd, it's c (hdd), d (cd)
-	@echo
-	qemu-system-x86_64 -debugcon stdio -boot order=cd -cdrom build/potatos-$(ARCH).iso -m $(M)M -D ./log.txt
+run: iso run-nobuild
 
 .PHONY: run-nobuild
 run-nobuild:
@@ -31,9 +33,3 @@ run-nobuild:
 .PHONY: all
 all: clean
 	$(MKBUILD)
-
-.PHONY: clean
-	rm -rf build
-	rm -rf bin
-	rm -rf obj
-	

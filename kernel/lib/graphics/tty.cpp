@@ -12,6 +12,7 @@
 
 #include <palettes/xubunterm.h>
 
+#warning TODO: Patch bug with bold text attribute not being preserved on scrolling
 void tty::Framebuffer::DrawGlyphNoClip(uint32_t x, uint32_t y, uint8_t chr, uint32_t bg, uint32_t fg) {
     for (uint32_t cy = 0; cy < font.size_y; cy++) {
         uint32_t offset = y * width + pitch + x;
@@ -32,10 +33,14 @@ void tty::Terminal::ScrollScreenUp(uint16_t amount) {
     uint32_t cx = 0;
     uint32_t cy = 0;
     uint16_t i = 0;
+    size_t offset;
     for (; i < size_total - (amount * (size_x)); i++) {
-        buffer_text[i] = buffer_text[i + amount * size_x];
-        buffer_bg[i] = buffer_bg[i + amount * size_x];
-        buffer_fg[i] = buffer_fg[i + amount * size_x];
+        offset = i + amount * size_x;
+        buffer_text[i] = buffer_text[offset];
+        buffer_bg[i] = buffer_bg[offset];
+        buffer_fg[i] = buffer_fg[offset];
+        buffer_attr[i] = buffer_attr[offset];
+        fb.font = (attributes & TTY_ATTRIBUTE_BOLD) ? font : font_bold;
         fb.DrawGlyphNoClip(
             cx, cy, buffer_text[i], buffer_bg[i], buffer_fg[i]);
         cx += font.size_x;
@@ -148,6 +153,7 @@ void tty::Terminal::Putchar(const char chr) {
                 buffer_text[buffer_index] = ' ';
                 buffer_bg[buffer_index] = palette[0];
                 buffer_fg[buffer_index] = palette[15];
+                buffer_attr[buffer_index] = 0;
                 break;
             case '\n':
                 if (++y > size_y - 1) { ScrollScreenUp(1); }
@@ -160,6 +166,7 @@ void tty::Terminal::Putchar(const char chr) {
                 buffer_text[buffer_index] = (uint8_t)(chr);
                 buffer_bg[buffer_index] = bg;
                 buffer_fg[buffer_index] = fg;
+                buffer_attr[buffer_index] = attributes;
 
                 if (++x > size_x - 1) {
                     if (++y > size_y - 1) { ScrollScreenUp(1); }
@@ -261,11 +268,11 @@ bool tty::Terminal::ANSI_SkipOrParseCheck(uint8_t chr) {
                         case 0: // Reset Attributes
                             bg = palette[0];
                             fg = palette[15];
-                            bold = false;
+                            attributes &= ~TTY_ATTRIBUTE_BOLD;
                             fb.font = font;
                             ANSI_DONE();
                         case 1: // Bold
-                            bold = true;
+                            attributes |= TTY_ATTRIBUTE_BOLD;
                             fb.font = font_bold;
                             ANSI_DONE();
                         case 7:  // Reverse Colors:
@@ -274,7 +281,7 @@ bool tty::Terminal::ANSI_SkipOrParseCheck(uint8_t chr) {
                             bg = tmp;
                             ANSI_DONE();
                         case 22:  // Normal Intensity
-                            bold = false;
+                            attributes &= ~TTY_ATTRIBUTE_BOLD;
                             fb.font = font;
                             ANSI_DONE();
                         case 38:
@@ -341,12 +348,8 @@ void tty::Terminal::Printf(const char *str, ...) {
     va_end(va);
 }
 
-void tty::Terminal::ClearScreen() {
-    memset(fb.vram, 0, (fb.width * fb.height) + (fb.pitch * fb.height / sizeof(fb.vram[0])));
-}
-
 bool tty::Terminal::Init(Framebuffer in_fb, bitmap_font in_font, bitmap_font in_font_bold, uint32_t *in_palette, uint8_t *in_buffer_text,
-   uint32_t *in_buffer_bg, uint32_t *in_buffer_fg) {
+   uint32_t *in_buffer_bg, uint32_t *in_buffer_fg, uint8_t *in_buffer_attr) {
     if (in_fb.vram == NULL) {
         initialized = false;
         return false;
@@ -366,8 +369,9 @@ bool tty::Terminal::Init(Framebuffer in_fb, bitmap_font in_font, bitmap_font in_
         buffer_text = in_buffer_text;
         buffer_bg = in_buffer_bg;
         buffer_fg = in_buffer_fg;
+        buffer_attr = in_buffer_attr;
         ansi_mode = ANSI_PARSE_MODE_ESC;
-        bold = false;
+        attributes = 0;
         initialized = true;
         return true;
     }

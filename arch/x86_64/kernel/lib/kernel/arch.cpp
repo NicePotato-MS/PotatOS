@@ -7,6 +7,7 @@
 #include <arch.h>
 #include <limine.h>
 #include <tty.h>
+#include <cpuinfo.h>
 
 #include <fonts/dina_7x16.h>
 #include <fonts/dina_bold_7x16.h>
@@ -14,12 +15,15 @@
 
 // Will cause page fault or undefined behaviour with fonts bigger than 8 pixel width
 // Also with resolutions above 1920x1080
-uint8_t term_buffer_text[275 * 155];
-uint32_t term_buffer_bg[275 * 155];
-uint32_t term_buffer_fg[275 * 155];
+#define TTY_BUFFER_SIZE 275 * 155
 
-struct limine_framebuffer_request framebuffer_request = {
-    LIMINE_FRAMEBUFFER_REQUEST, 0, NULL};
+uint8_t term_buffer_text[TTY_BUFFER_SIZE];
+uint32_t term_buffer_bg[TTY_BUFFER_SIZE];
+uint32_t term_buffer_fg[TTY_BUFFER_SIZE];
+uint8_t term_buffer_attr[TTY_BUFFER_SIZE];
+
+    struct limine_framebuffer_request framebuffer_request = {
+        LIMINE_FRAMEBUFFER_REQUEST, 0, NULL};
 
 void arch::Setup() {
     if (framebuffer_request.response == NULL ||
@@ -37,7 +41,7 @@ void arch::Setup() {
         fb.font = dina_7x16;
 
         if (tty::tty1.Init(fb, dina_7x16, dina_bold_7x16, xubunterm_palette, term_buffer_text,
-                term_buffer_bg, term_buffer_fg)) {
+                term_buffer_bg, term_buffer_fg, term_buffer_attr)) {
             krnl::Printf_ok("TTY1 Ready");
         } else {
             krnl::Printf_fail("No Framebuffer for Terminal");
@@ -45,9 +49,7 @@ void arch::Setup() {
     }
 
     gdt::Load();
-    krnl::Printf_ok("GDT Loaded");
     gdt::SetSegments(GDT_CS_KERNEL, GDT_DS_KERNEL); // 64-bit code, 64-bit data
-    krnl::Printf_ok("Switched to new segments");
 
     idt::Init();
     krnl::Printf_ok("IDT Initialized");
@@ -57,4 +59,7 @@ void arch::Setup() {
     krnl::Printf_ok("PIC Slave Initialized");
 
     krnl::Printf_ok("Architecture setup done");
+
+    krnl::Printf_info("CPU Model: %s", cpuinfo::GetModelString());
+    krnl::Printf_info("Has APIC: %s", cpuinfo::HasAPIC() ? "true" : "false");
 }

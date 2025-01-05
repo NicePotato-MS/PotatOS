@@ -2,7 +2,7 @@
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -26,14 +26,14 @@
    "-c",
    "kernel/src/kmain.cpp",
    "-o",
-   "kobj/kernel/src/kmain.cpp.o"
+   "build/kobj/kernel/src/kmain.cpp.o"
   ],
   "file": "kernel/src/kmain.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -57,14 +57,14 @@
    "-c",
    "kernel/lib/libc/stdio/fmt.cpp",
    "-o",
-   "kobj/kernel/lib/libc/stdio/fmt.cpp.o"
+   "build/kobj/kernel/lib/libc/stdio/fmt.cpp.o"
   ],
   "file": "kernel/lib/libc/stdio/fmt.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -88,14 +88,14 @@
    "-c",
    "kernel/lib/libc/string/memcmp.cpp",
    "-o",
-   "kobj/kernel/lib/libc/string/memcmp.cpp.o"
+   "build/kobj/kernel/lib/libc/string/memcmp.cpp.o"
   ],
   "file": "kernel/lib/libc/string/memcmp.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -119,14 +119,14 @@
    "-c",
    "kernel/lib/libc/string/memset.cpp",
    "-o",
-   "kobj/kernel/lib/libc/string/memset.cpp.o"
+   "build/kobj/kernel/lib/libc/string/memset.cpp.o"
   ],
   "file": "kernel/lib/libc/string/memset.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -150,14 +150,14 @@
    "-c",
    "kernel/lib/libc/string/memmove.cpp",
    "-o",
-   "kobj/kernel/lib/libc/string/memmove.cpp.o"
+   "build/kobj/kernel/lib/libc/string/memmove.cpp.o"
   ],
   "file": "kernel/lib/libc/string/memmove.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -181,14 +181,14 @@
    "-c",
    "kernel/lib/libc/string/memcpy.cpp",
    "-o",
-   "kobj/kernel/lib/libc/string/memcpy.cpp.o"
+   "build/kobj/kernel/lib/libc/string/memcpy.cpp.o"
   ],
   "file": "kernel/lib/libc/string/memcpy.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -212,14 +212,14 @@
    "-c",
    "kernel/lib/kernel/printk.cpp",
    "-o",
-   "kobj/kernel/lib/kernel/printk.cpp.o"
+   "build/kobj/kernel/lib/kernel/printk.cpp.o"
   ],
   "file": "kernel/lib/kernel/printk.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -243,14 +243,14 @@
    "-c",
    "kernel/lib/kernel/errorcodes.cpp",
    "-o",
-   "kobj/kernel/lib/kernel/errorcodes.cpp.o"
+   "build/kobj/kernel/lib/kernel/errorcodes.cpp.o"
   ],
   "file": "kernel/lib/kernel/errorcodes.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -274,14 +274,14 @@
    "-c",
    "kernel/lib/kernel/panic.cpp",
    "-o",
-   "kobj/kernel/lib/kernel/panic.cpp.o"
+   "build/kobj/kernel/lib/kernel/panic.cpp.o"
   ],
   "file": "kernel/lib/kernel/panic.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -305,14 +305,14 @@
    "-c",
    "kernel/lib/misc/ansi.cpp",
    "-o",
-   "kobj/kernel/lib/misc/ansi.cpp.o"
+   "build/kobj/kernel/lib/misc/ansi.cpp.o"
   ],
   "file": "kernel/lib/misc/ansi.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -336,14 +336,14 @@
    "-c",
    "kernel/x86/lib/io/serial.cpp",
    "-o",
-   "kobj/kernel/x86/lib/io/serial.cpp.o"
+   "build/kobj/kernel/x86/lib/io/serial.cpp.o"
   ],
   "file": "kernel/x86/lib/io/serial.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -367,14 +367,14 @@
    "-c",
    "kernel/x86/kernel/hang.cpp",
    "-o",
-   "kobj/kernel/x86/kernel/hang.cpp.o"
+   "build/kobj/kernel/x86/kernel/hang.cpp.o"
   ],
   "file": "kernel/x86/kernel/hang.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -398,14 +398,14 @@
    "-c",
    "arch/x86_64/kernel/lib/kernel/gdt.cpp",
    "-o",
-   "kobj/arch/x86_64/kernel/lib/kernel/gdt.cpp.o"
+   "build/kobj/arch/x86_64/kernel/lib/kernel/gdt.cpp.o"
   ],
   "file": "arch/x86_64/kernel/lib/kernel/gdt.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -429,14 +429,14 @@
    "-c",
    "arch/x86_64/kernel/lib/kernel/arch.cpp",
    "-o",
-   "kobj/arch/x86_64/kernel/lib/kernel/arch.cpp.o"
+   "build/kobj/arch/x86_64/kernel/lib/kernel/arch.cpp.o"
   ],
   "file": "arch/x86_64/kernel/lib/kernel/arch.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -460,45 +460,14 @@
    "-c",
    "arch/x86_64/kernel/lib/kernel/gdt.S",
    "-o",
-   "kobj/arch/x86_64/kernel/lib/kernel/gdt.S.o"
+   "build/kobj/arch/x86_64/kernel/lib/kernel/gdt.S.o"
   ],
   "file": "arch/x86_64/kernel/lib/kernel/gdt.S"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
-   "-Wall",
-   "-Wextra",
-   "-Wshadow",
-   "-Wvla",
-   "-g",
-   "-O2",
-   "-Ikernel/include",
-   "-DDEBUG",
-   "-ffreestanding",
-   "-fno-stack-protector",
-   "-fno-stack-check",
-   "-fno-lto",
-   "-fPIE",
-   "-m64",
-   "-march=x86-64",
-   "-mgeneral-regs-only",
-   "-mno-red-zone",
-   "-Ilimine",
-   "-Ikernel/x86/include",
-   "-Iarch/x86_64/include",
-   "-c",
-   "arch/x86_64/kernel/lib/kernel/interrupts/idt.cpp",
-   "-o",
-   "kobj/arch/x86_64/kernel/lib/kernel/interrupts/idt.cpp.o"
-  ],
-  "file": "arch/x86_64/kernel/lib/kernel/interrupts/idt.cpp"
- },
- {
-  "directory": "/home/xubuntu/Documents/PotatOS_Try2",
-  "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -522,14 +491,14 @@
    "-c",
    "kernel/lib/graphics/tty.cpp",
    "-o",
-   "kobj/kernel/lib/graphics/tty.cpp.o"
+   "build/kobj/kernel/lib/graphics/tty.cpp.o"
   ],
   "file": "kernel/lib/graphics/tty.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -553,14 +522,14 @@
    "-c",
    "kernel/lib/graphics/fonts/dina_7x16.cpp",
    "-o",
-   "kobj/kernel/lib/graphics/fonts/dina_7x16.cpp.o"
+   "build/kobj/kernel/lib/graphics/fonts/dina_7x16.cpp.o"
   ],
   "file": "kernel/lib/graphics/fonts/dina_7x16.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -584,14 +553,14 @@
    "-c",
    "kernel/lib/graphics/palettes/xubunterm.cpp",
    "-o",
-   "kobj/kernel/lib/graphics/palettes/xubunterm.cpp.o"
+   "build/kobj/kernel/lib/graphics/palettes/xubunterm.cpp.o"
   ],
   "file": "kernel/lib/graphics/palettes/xubunterm.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -615,14 +584,14 @@
    "-c",
    "kernel/lib/graphics/fonts/dina_bold_7x16.cpp",
    "-o",
-   "kobj/kernel/lib/graphics/fonts/dina_bold_7x16.cpp.o"
+   "build/kobj/kernel/lib/graphics/fonts/dina_bold_7x16.cpp.o"
   ],
   "file": "kernel/lib/graphics/fonts/dina_bold_7x16.cpp"
  },
  {
   "directory": "/home/xubuntu/Documents/PotatOS_Try2",
   "arguments": [
-   "tools/x86_64/bin/x86_64-elf-gcc",
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
    "-Wall",
    "-Wextra",
    "-Wshadow",
@@ -646,8 +615,101 @@
    "-c",
    "arch/x86_64/kernel/lib/kernel/pic.cpp",
    "-o",
-   "kobj/arch/x86_64/kernel/lib/kernel/pic.cpp.o"
+   "build/kobj/arch/x86_64/kernel/lib/kernel/pic.cpp.o"
   ],
   "file": "arch/x86_64/kernel/lib/kernel/pic.cpp"
+ },
+ {
+  "directory": "/home/xubuntu/Documents/PotatOS_Try2",
+  "arguments": [
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
+   "-Wall",
+   "-Wextra",
+   "-Wshadow",
+   "-Wvla",
+   "-g",
+   "-O2",
+   "-Ikernel/include",
+   "-DDEBUG",
+   "-ffreestanding",
+   "-fno-stack-protector",
+   "-fno-stack-check",
+   "-fno-lto",
+   "-fPIE",
+   "-m64",
+   "-march=x86-64",
+   "-mgeneral-regs-only",
+   "-mno-red-zone",
+   "-Ilimine",
+   "-Ikernel/x86/include",
+   "-Iarch/x86_64/include",
+   "-c",
+   "arch/x86_64/kernel/lib/kernel/idt.cpp",
+   "-o",
+   "build/kobj/arch/x86_64/kernel/lib/kernel/idt.cpp.o"
+  ],
+  "file": "arch/x86_64/kernel/lib/kernel/idt.cpp"
+ },
+ {
+  "directory": "/home/xubuntu/Documents/PotatOS_Try2",
+  "arguments": [
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
+   "-Wall",
+   "-Wextra",
+   "-Wshadow",
+   "-Wvla",
+   "-g",
+   "-O2",
+   "-Ikernel/include",
+   "-DDEBUG",
+   "-ffreestanding",
+   "-fno-stack-protector",
+   "-fno-stack-check",
+   "-fno-lto",
+   "-fPIE",
+   "-m64",
+   "-march=x86-64",
+   "-mgeneral-regs-only",
+   "-mno-red-zone",
+   "-Ilimine",
+   "-Ikernel/x86/include",
+   "-Iarch/x86_64/include",
+   "-c",
+   "arch/x86_64/kernel/lib/kernel/ps2.cpp",
+   "-o",
+   "build/kobj/arch/x86_64/kernel/lib/kernel/ps2.cpp.o"
+  ],
+  "file": "arch/x86_64/kernel/lib/kernel/ps2.cpp"
+ },
+ {
+  "directory": "/home/xubuntu/Documents/PotatOS_Try2",
+  "arguments": [
+   "~/tools/cross-compiler/x86_64/bin/x86_64-elf-gcc",
+   "-Wall",
+   "-Wextra",
+   "-Wshadow",
+   "-Wvla",
+   "-g",
+   "-O2",
+   "-Ikernel/include",
+   "-DDEBUG",
+   "-ffreestanding",
+   "-fno-stack-protector",
+   "-fno-stack-check",
+   "-fno-lto",
+   "-fPIE",
+   "-m64",
+   "-march=x86-64",
+   "-mgeneral-regs-only",
+   "-mno-red-zone",
+   "-Ilimine",
+   "-Ikernel/x86/include",
+   "-Iarch/x86_64/include",
+   "-c",
+   "arch/x86_64/kernel/lib/misc/cpuinfo.cpp",
+   "-o",
+   "build/kobj/arch/x86_64/kernel/lib/misc/cpuinfo.cpp.o"
+  ],
+  "file": "arch/x86_64/kernel/lib/misc/cpuinfo.cpp"
  }
 ]

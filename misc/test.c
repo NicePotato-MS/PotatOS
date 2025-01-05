@@ -11,7 +11,7 @@ int main() {
     char test[] = "hello";
     
     // Print the string
-    printf("String %s %#x\n", 0x01);
+    printf("%p", *main);
 
     return 0;
 }

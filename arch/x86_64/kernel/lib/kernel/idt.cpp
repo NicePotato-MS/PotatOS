@@ -45,6 +45,12 @@ __attribute__((interrupt)) static void page_fault_handler(void* ptr) {
     krnl::Panic(KERNEL_PANIC_PAGE_FAULT);
 }
 
+__attribute__((interrupt)) static void general_handler(void* ptr) {
+    krnl::Printf_info("General interrupt at %p", ptr);
+    // krnl::Panic(KERNEL_PANIC_SUCCESS);
+    
+}
+
 void idt::SetEntry(uint8_t vector, void* isr, uint8_t ist, uint8_t flags) {
     idt::isr_entry* entry = &idt::array[vector];
 
@@ -57,22 +63,21 @@ void idt::SetEntry(uint8_t vector, void* isr, uint8_t ist, uint8_t flags) {
     entry->reserved = 0;
 }
 
-#define NEW_TRAP(vector, isr) SetEntry(vector, reinterpret_cast<void*>(&isr), 0, \
-SYS_SD_PRESENT | SYS_SD_RING_0 | SYS_SD_TYPE_TRAP);
-
 void idt::Init() {
     idtr.base = (uintptr_t)&idt::array;
     idtr.limit = (uint16_t)sizeof(idt::isr_entry) * 255;
 
     for (size_t vector = 0; vector < 32; vector++) {
-        NEW_TRAP(vector, default_handler)
+        NEW_INTERRUPT(vector, default_handler)
     }
 
-    NEW_TRAP(INTERRUPT_DIVIDE_ERROR, division_error_handler)
-    NEW_TRAP(INTERRUPT_INVALID_OPCODE, invalid_opcode_handler)
-    NEW_TRAP(INTERRUPT_STACK_SEGMENT_FAULT, stack_segment_fault_handler);
-    NEW_TRAP(INTERRUPT_GENERAL_PROTECTION, general_protection_handler);
-    NEW_TRAP(INTERRUPT_PAGE_FAULT, page_fault_handler);
+    NEW_INTERRUPT(INTERRUPT_DIVIDE_ERROR, division_error_handler)
+    NEW_INTERRUPT(INTERRUPT_INVALID_OPCODE, invalid_opcode_handler)
+    NEW_INTERRUPT(INTERRUPT_STACK_SEGMENT_FAULT, stack_segment_fault_handler);
+    NEW_INTERRUPT(INTERRUPT_GENERAL_PROTECTION, general_protection_handler);
+    NEW_INTERRUPT(INTERRUPT_PAGE_FAULT, page_fault_handler);
+
+    NEW_INTERRUPT(INTERRUPT_PS2_1, general_handler);
 
     __asm__ volatile("cli");
     __asm__ volatile("lidt %0" : : "m"(idtr));

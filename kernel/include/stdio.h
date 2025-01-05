@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdarg.h>
 #include <stddef.h>
+#include <stdbool.h>
 
 /**
  * Formats a string and outputs to an input putchar function

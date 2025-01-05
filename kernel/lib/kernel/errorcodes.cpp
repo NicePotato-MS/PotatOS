@@ -7,14 +7,14 @@ const char *category_misc[] = {
     "Unknown Error"
 };
 
-const char *category_memory[] = {"Page Fault", "Segmentation Fault"};
+const char *category_memory[] = {"Unhandled Page Fault", "Unhandled Segmentation Fault"};
 
 const char *category_interrupt[] = {
-    "Unhandled Interrupt", "General Protection"};
+    "Unhandled Interrupt", "Unhandled General Protection"};
 
-const char *category_math[] = {"Division by Zero"};
+const char *category_math[] = {"Unhandled Division by Zero"};
 
-const char *category_execution[] = {"Invalid Opcode"};
+const char *category_execution[] = {"Unhandled Invalid Opcode"};
 
 const char **kernel_error_categories[] = {category_misc, category_memory,
     category_interrupt, category_math, category_execution};

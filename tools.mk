@@ -1,4 +1,6 @@
-CROS_CC := tools/$(ARCH)/bin/$(ARCH)-elf-gcc
+TOOLS := ~/tools
+
+CROS_CC := $(TOOLS)/cross-compiler/$(ARCH)/bin/$(ARCH)-elf-gcc
 CROS_KERNEL_CFLAGS := \
 	-Wall \
 	-Wextra \
@@ -8,9 +10,7 @@ CROS_KERNEL_CFLAGS := \
 	-O2 \
 	-Ikernel/include
 
-
-
-CROS_LD := tools/$(ARCH)/bin/$(ARCH)-elf-ld
+CROS_LD := $(TOOLS)/cross-compiler/$(ARCH)/bin/$(ARCH)-elf-ld
 CROS_LDFLAGS := \
     -nostdlib \
     -z max-page-size=0x1000 \

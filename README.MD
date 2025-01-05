@@ -2,10 +2,34 @@
 
 Potato Operating System for Potato Computers
 
-## WIP
+> [!WARNING]
+> README still a WIP
 
-## Get cross compiler from https://github.com/lordmilko/i686-elf-tools
+## About this Project
 
-Download (arch)-elf-tools-linux.zip and extract it to tools/(arch)/
+PotatOS is an operating system and kernel made completely from scratch by one person. It is made in C++ with some assembly.
 
-> I am aware this isn't the best way to do this. I'll come up with something better later...
+## Info
+
+### Supported Architectures
+
+- [x] - AMD64 / x86_64
+- [ ] - IA32 / x86 (Future support is planned)
+- [ ] - RISC-V
+- [ ] - AARCH64 / ARM64
+
+> [!NOTE]
+> RISC-V and ARM64 may come later on in development, but not current priority
+
+### Tools required
+
+wget - To download project-specific tools
+unzip - Self-explanatory
+make - Builds makefiles
+strip - To strip ELF binaries of debug info
+xorriso - ISO creation and manipulation
+
+#### Tools included or automatically installed
+
+limine - Bootloader created by mintsuki
+[arch]-elf-gcc - Cross compiler for target architecture (plus misc gcc related tools)

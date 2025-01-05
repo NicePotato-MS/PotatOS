@@ -286,7 +286,11 @@ int format(int (*in_putchar)(const char *, void *, size_t),
                     for (int i = 0; i < width - len; i++) { putone(" "); }
                 }
                 break;
-            case CONTROL_CHARACTER: putone(CONTROL_CHARACTER_STR); break;
+            case CONTROL_CHARACTER:
+                putone(CONTROL_CHARACTER_STR);
+                break;
+            case '\0':
+                return -1;
             default: putchar(&str_in[-1], putchar_args, 1); break;
         }
     }

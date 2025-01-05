@@ -1,10 +1,4 @@
-isoroot
 build
-kbin
-kobj
-bin
-obj
-tools
 limine-test
 
 *.o
@@ -12,3 +6,4 @@ limine-test
 
 .cache
 compile_commands.json
+log.txt

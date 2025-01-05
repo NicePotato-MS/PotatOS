@@ -3,6 +3,7 @@
 #include <stddef.h>
 
 #include <gdt.h>
+#include <kernel.h>
 #include <segment.h>
 
 #define GDT_DATA 0 << 3 // Data Segment
@@ -89,12 +90,14 @@ struct {
 void gdt::Load() {
     gdtr.limit = sizeof(gdt_array) - 1;
     gdtr.base = (uintptr_t)&gdt_array;
-    __asm__ volatile("lgdt %0" :: "m"(gdtr));
+    __asm__ volatile("lgdt %0" ::"m"(gdtr));
+    krnl::Printf_ok("GDT Loaded");
 }
 
 extern "C" void asm_gdt_reload_segment(size_t cs, size_t ds);
 
 void gdt::SetSegments(size_t code_segment, size_t data_segment) {
     asm_gdt_reload_segment(code_segment, data_segment);
+    krnl::Printf_ok("Switched GDT Segment - CS: %#4X DS: %#4X", code_segment, data_segment);
 }
 

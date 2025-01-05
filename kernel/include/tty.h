@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#define TTY_ATTRIBUTE_BOLD 1
+
 namespace tty {
     typedef struct {
         uint16_t size_x;
@@ -30,7 +32,7 @@ namespace tty {
         uint8_t ansi_arg_p;
         uint32_t ansi_arg_buffer[16];
 
-        bool bold;
+        bool attributes;
        public:
         Framebuffer fb;
         bitmap_font font;
@@ -48,6 +50,7 @@ namespace tty {
         uint8_t *buffer_text;
         uint32_t *buffer_bg;
         uint32_t *buffer_fg;
+        uint8_t *buffer_attr;
 
         void Putchar(const char chr);
         void Putchar(const char *chr, size_t size);
@@ -69,7 +72,7 @@ namespace tty {
 
         bool Init(Framebuffer in_fb, bitmap_font in_font, bitmap_font in_font_bold,
             uint32_t *in_palette, uint8_t *in_buffer_text, uint32_t *in_buffer_bg,
-            uint32_t *in_buffer_fg);
+            uint32_t *in_buffer_fg, uint8_t *in_buffer_attr);
 
         bool ANSI_SkipOrParseCheck(uint8_t chr);
     };
