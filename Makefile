@@ -1,5 +1,5 @@
 # PotatOS - a potato operating system for potato computers
-# Created by NicePotato 2022-2024
+# Created by NicePotato 2022-2025
 
 ARCH ?= x86_64
 DEBUG ?= true
@@ -10,12 +10,20 @@ LIMINE_CUSTOM ?= false
 
 M ?= 32
 
-MKBUILD = make -f build.mk iso DEBUG=$(DEBUG) ARCH=$(ARCH) OUT_ASM=$(OUT_ASM) LIMINE_CUSTOM=$(LIMINE_CUSTOM)
+MKBUILD = -f build.mk iso DEBUG=$(DEBUG) ARCH=$(ARCH) OUT_ASM=$(OUT_ASM) LIMINE_CUSTOM=$(LIMINE_CUSTOM)
+
+ifneq ($(shell command -v compiledb),)
+	MAKETOOL = compiledb make
+$(info Using compiledb to build)
+else
+	MAKETOOL = make
+$(info Using make to build (no compiledb))
+endif
 
 .PHONY: iso
 iso:
 	make -f download-tools.mk ARCH=$(ARCH)
-	compiledb $(MKBUILD)
+	$(MAKETOOL) $(MKBUILD)
 
 .PHONY: download-tools
 download-tools:
@@ -27,7 +35,8 @@ run: iso run-nobuild
 .PHONY: run-nobuild
 run-nobuild:
 	@echo
-	qemu-system-x86_64 -debugcon stdio -boot order=cd -cdrom build/potatos-$(ARCH).iso -m $(M)M -D ./log.txt
+	qemu-system-x86_64 -debugcon stdio -boot order=cd -m $(M)M -D ./log.txt \
+	-cdrom $(shell find ./build/ -type f -name "potatos-x86_64-*.iso" | head -n 1)
 	
 
 .PHONY: all

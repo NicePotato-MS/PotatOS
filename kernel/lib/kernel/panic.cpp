@@ -21,5 +21,6 @@ void krnl::Panic(uint32_t errorcode) {
         krnl::Printf("Error: %s%s%s\n", ANSI_RESET, ANSI_BRIGHT_RED,
             kernel_error_categories[category][error]);
     }
+    krnl::Printf("%s", ANSI_RESET);
     halt();
 }

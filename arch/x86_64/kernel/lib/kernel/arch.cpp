@@ -1,6 +1,7 @@
 #include <stdint.h>
 
 #include <kernel.h>
+#include <memory.h> 
 #include <interrupts.h>
 #include <gdt.h>
 #include <pic.h>
@@ -57,6 +58,9 @@ void arch::Setup() {
     pic::Init();
     krnl::Printf_ok("PIC Master Initialized");
     krnl::Printf_ok("PIC Slave Initialized");
+
+    memory::Init();
+    krnl::Printf_ok("Memory setup done");
 
     krnl::Printf_ok("Architecture setup done");
 

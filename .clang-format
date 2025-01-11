@@ -1,13 +1,13 @@
 ---
 BasedOnStyle: Google
 IndentWidth: 4
-ColumnLimit: 95
-AlignAfterOpenBracket: DontAlign
+ColumnLimit: 0
+AlignAfterOpenBracket: BlockIndent
 BreakBeforeBraces: Custom
 BraceWrapping:
     AfterControlStatement: Never
-BinPackArguments: true
-BinPackParameters: true
+BinPackArguments: false
+BinPackParameters: false
 AllowAllArgumentsOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: Always

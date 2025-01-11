@@ -3,11 +3,6 @@
 #include <stdint.h>
 #include <stdarg.h>
 
-#define KERNEL_VERSION_MAJOR 0
-#define KERNEL_VERSION_MINOR 1
-#define KERNEL_VERSION_PATCH 2
-
-
 #define KERNEL_ERROR_CATEGORIES 4
 
 #define KERNEL_PANIC_SUCCESS 0x00000000
