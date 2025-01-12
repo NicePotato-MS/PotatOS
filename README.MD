@@ -9,8 +9,8 @@ Potato Operating System for Potato Computers
 
 
 
-:::warning
-README still a WIP
+> [!WARNING]
+> README still a WIP
 
 :::
 
@@ -36,8 +36,8 @@ Remake build system in new language
 
 
 
-:::info
-RISC-V and ARM64 may come later on in development, but not current priority
+> [!NOTE]
+> RISC-V and ARM64 may come later on in development, but not current priority
 
 :::
 
