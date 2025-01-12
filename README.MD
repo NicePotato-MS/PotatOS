@@ -6,13 +6,9 @@ Potato Operating System for Potato Computers
  ![](github/images/preview-0.1.3.png)
 
 
-
-
-
 > [!WARNING]
 > README still a WIP
 
-:::
 
 # About this Project
 
@@ -38,8 +34,6 @@ Remake build system in new language
 
 > [!NOTE]
 > RISC-V and ARM64 may come later on in development, but not current priority
-
-:::
 
 # Tools
 
