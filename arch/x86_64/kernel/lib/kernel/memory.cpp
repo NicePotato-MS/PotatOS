@@ -31,14 +31,14 @@ const char *memory::memmap_type[] = {
     "Framebuffer"
 };
 
-void* memory::PhysicalAddressToVirtual() {
-    
+void* memory::PhysicalAddressToVirtual(void* address) {
+    return (void*)((size_t)(address) + (size_t)(memory::hhdm));
 }
 
 void memory::Init() {
     if (!memmap_request.response) {
         krnl::Printf_error("No Memory Map!");
-        krnl::Panic(KERNEL_PANIC_UNKNOWN_ERROR);
+        krnl::Panic(KERNEL_PANIC_BOOTLOADER_NO_MEMMAP);
     }
 
     memory::hhdm = (void *)hhdm_request.response->offset;
@@ -54,4 +54,6 @@ void memory::Init() {
             entry->base + entry->length - 1
         );
     }
+
+
 }
