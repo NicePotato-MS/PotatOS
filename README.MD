@@ -3,6 +3,9 @@
 Potato Operating System for Potato Computers
 
 
+ ![](github/images/preview-0.1.3.png)
+
+
 
 
 
@@ -28,6 +31,8 @@ PotatOS is an operating system and kernel made completely from scratch by one pe
 # Todo
 
 Remake build system in new language
+
+
 
 
 
