@@ -10,7 +10,8 @@ const char *category_misc[] = {
 const char *category_memory[] = {
     "Unhandled Page Fault",
     "Unhandled Segmentation Fault",
-    "Bootloader did not pass memory map"
+    "Bootloader did not pass memory map",
+    "Out of Physical Memory"
 };
 
 const char *category_interrupt[] = {

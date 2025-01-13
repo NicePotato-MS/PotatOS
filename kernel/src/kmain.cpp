@@ -13,8 +13,7 @@
 
 #include <fonts/dina_7x16.h>
 
-LIMINE_BASE_REVISION(2);
-
+LIMINE_BASE_REVISION(3);
 
 
 extern "C" void _kmain() {
