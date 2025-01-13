@@ -56,9 +56,6 @@ size_t bump_head = 0;
 size_t bump_end = 0;
 size_t bump_memmap_entry = 0;
 
-size_t freelist_head;
-size_t freelist_end;
-
 void bumpGetNextRegion() {
     limine_memmap_entry* entry;
 
@@ -71,14 +68,7 @@ void bumpGetNextRegion() {
                 bump_head = memory::PhysicalAddressToVirtual((entry->base + 0xFFF) & ~0xFFF) - PAGE_SIZE;
                 bump_end = memory::PhysicalAddressToVirtual((entry->base + entry->length) & ~0xFFF) - PAGE_SIZE;
                 if (bump_end - bump_head >= PAGE_SIZE) {
-                    krnl::Printf_info("BA: %0#6X : %22s : %018p - %018p",
-                        bump_memmap_entry,
-                        memory::memmap_type[entry->type],
-                        entry->base,
-                        entry->base + entry->length - 1
-                    );
                     bump_memmap_entry++;
-                    
                     return;
                 }
         }
@@ -98,7 +88,34 @@ size_t balloc() {
 }
 
 
+size_t freelist_head = 0;
+size_t freelist_end = 0;
 
+size_t palloc() {
+    if (!freelist_head) {
+        return balloc();
+    }
+
+    if (freelist_head == freelist_end) {
+        freelist_head = 0;
+        return freelist_end;
+    } else {
+        size_t free_page = freelist_head;
+        freelist_head = *(size_t*)freelist_head;
+        return free_page;
+    }
+}
+
+template <typename T>
+void pfree(T address) {
+    if (freelist_head != 0) {
+        *(T*)freelist_end = address;
+        freelist_end = reinterpret_cast<size_t>(address);
+    } else {
+        freelist_head = reinterpret_cast<size_t>(address);
+        freelist_end = reinterpret_cast<size_t>(address);
+    }
+}
 
 void memory::Init() {
     if (!memmap_request.response) {
@@ -114,14 +131,33 @@ void memory::Init() {
 
     krnl::Printf_info("HHDM: %018p", hhdm);
 
-    krnl::Printf_info("Memory Map");
-    for (size_t i = 0; i < memory::memmap->entry_count; i++) {
-        limine_memmap_entry* entry = memory::memmap->entries[i];
-        krnl::Printf("%0#6X : %22s : %018p - %018p\n",
-            i,
-            memmap_type[entry->type],
-            entry->base,
-            entry->base + entry->length - 1
-        );
-    }
+    // krnl::Printf_info("Memory Map");
+    // for (size_t i = 0; i < memory::memmap->entry_count; i++) {
+    //     limine_memmap_entry* entry = memory::memmap->entries[i];
+    //     krnl::Printf("%0#6X : %22s : %018p - %018p\n",
+    //         i,
+    //         memmap_type[entry->type],
+    //         entry->base,
+    //         entry->base + entry->length - 1
+    //     );
+    // }
+
+    krnl::Printf_info("Allocating pages");
+    uint8_t* page1 = (uint8_t*)palloc();
+    uint8_t* page2 = (uint8_t*)palloc();
+    krnl::Printf_ok("Allocated Pages");
+    krnl::Printf("Page 1: %18p\n", page1);
+    krnl::Printf("Page 2: %18p\n", page2);
+    krnl::Printf_info("Freeing pages");
+    pfree(page1);
+    pfree(page2);
+    krnl::Printf_ok("Freed Pages");
+    krnl::Printf_info("Freelist head: %18p", freelist_head);
+    krnl::Printf_info("Freelist end:  %18p", freelist_end);
+    krnl::Printf_info("Re-allocating pages");
+    uint8_t* page3 = (uint8_t*)palloc();
+    uint8_t* page4 = (uint8_t*)palloc();
+    krnl::Printf_ok("Re-allocated Pages");
+    krnl::Printf("Page 1: %18p\n", page3);
+    krnl::Printf("Page 2: %18p\n", page4);
 }
