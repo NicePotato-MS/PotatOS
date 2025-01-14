@@ -137,22 +137,24 @@ void memory::Init() {
     //     );
     // }
 
-    krnl::Printf_info("Allocating pages");
-    uint8_t* page1 = (uint8_t*)palloc();
-    uint8_t* page2 = (uint8_t*)palloc();
-    krnl::Printf_ok("Allocated Pages");
-    krnl::Printf("Page 1: %18p\n", page1);
-    krnl::Printf("Page 2: %18p\n", page2);
-    krnl::Printf_info("Freeing pages");
-    pfree(page1);
-    pfree(page2);
-    krnl::Printf_ok("Freed Pages");
-    krnl::Printf_info("Freelist head: %18p", freelist_head);
-    krnl::Printf_info("Freelist end:  %18p", freelist_end);
-    krnl::Printf_info("Re-allocating pages");
-    uint8_t* page3 = (uint8_t*)palloc();
-    uint8_t* page4 = (uint8_t*)palloc();
-    krnl::Printf_ok("Re-allocated Pages");
-    krnl::Printf("Page 1: %18p\n", page3);
-    krnl::Printf("Page 2: %18p\n", page4);
+    // krnl::Printf_info("Allocating pages");
+    // uint8_t* page1 = (uint8_t*)palloc();
+    // uint8_t* page2 = (uint8_t*)palloc();
+    // krnl::Printf_ok("Allocated Pages");
+    // krnl::Printf("Page 1: %18p\n", page1);
+    // krnl::Printf("Page 2: %18p\n", page2);
+    // krnl::Printf_info("Freeing pages");
+    // pfree(page1);
+    // pfree(page2);
+    // krnl::Printf_ok("Freed Pages");
+    // krnl::Printf_info("Freelist head: %18p", freelist_head);
+    // krnl::Printf_info("Freelist end:  %18p", freelist_end);
+    // krnl::Printf_info("Re-allocating pages");
+    // uint8_t* page3 = (uint8_t*)palloc();
+    // uint8_t* page4 = (uint8_t*)palloc();
+    // krnl::Printf_ok("Re-allocated Pages");
+    // krnl::Printf("Page 1: %18p\n", page3);
+    // krnl::Printf("Page 2: %18p\n", page4);
+
+    paging::Init();
 }
