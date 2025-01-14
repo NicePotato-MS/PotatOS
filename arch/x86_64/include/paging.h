@@ -1,43 +1,72 @@
 #pragma once
 
-#include <memory.h>
 #include <types.h>
 
+#include <memory.h>
 
-#define PAGE_PRESENT 1
+namespace page {
+    enum {
+        SIZE = 4096,
+    };
+}
+namespace page_table {
+    enum {
+        ENTRY_COUNT = 512
+    };
+    namespace shift {
+        enum {
+            PRESENT = 0,
+            READ_WRITE = 1,
+            PRIVELEGE = 2,
+            WRITE_THROUGH = 3,
+            CACHE_DISABLE = 4,
+            ACCESSED = 5,
 
-#define PAGE_READ_ONLY 0 >> 1
-#define PAGE_READ_WRITE 1 >> 1
+            SIZE = 7,
 
-#define PAGE_PRIVELEGE_SUPERVISOR 0 >> 2
-#define PAGE_PRIVELEGE_ALL 1 >> 2
+            DIRTY = 6,
+            PAT = 7,
+            GLOBAL = 8
+        };
+    }
+    
+    class PageTableEntry {
+       private:
+        size_t entry;
 
-#define PAGE_WRITE_BACK 0 >> 3
-#define PAGE_WRITE_THROUGH 1 >> 3
+       public:
+        inline PageTableEntry(size_t value) : entry(value) {}
 
-#define PAGE_CACHE_DISABLED 0 >> 4
-#define PAGE_CACHE_ENABLED 1 >> 4
+        inline bool GetPresent() const { return (entry >> shift::PRESENT) & 1; }
+        inline bool GetReadWrite() const { return (entry >> shift::READ_WRITE) & 1; }
+        inline bool GetPrivelege() const { return (entry >> shift::PRIVELEGE) & 1; }
+        inline bool GetWriteThrough() const { return (entry >> shift::WRITE_THROUGH) & 1; }
+        inline bool GetCacheDisable() const { return (entry >> shift::CACHE_DISABLE) & 1; }
+        inline bool GetAccessed() const { return (entry >> shift::ACCESSED) & 1; }
+    };
 
-#define PAGE_ACCESSED 1 >> 5
+    template <typename Derived>
+    class PageTable {
+       protected:
+        PageTableEntry entries[ENTRY_COUNT];
 
-#define PAGE_DIRTY 1 >> 6
+       public:
+        inline PageTableEntry& operator[](size_t index) { return entries[index]; }
+        inline const PageTableEntry& operator[](size_t index) const {return entries[index]; }
+    };
 
-#define PAGE_ATTRIBUTE_TABLE 1 >> 7
+    class PML4 : public PageTable<PML4> {};
 
-#define PAGE_GLOBAL 1 >> 8
+    class PDPT : public PageTable<PDPT> {};
 
-#define PAGE_SIZE_4KB 0 >> 7
-#define PAGE_SIZE_4MB 1 >> 7
+    class PD : public PageTable<PD> {};
 
-#define PAGE_EXECUTE_DISABLE 1 >> 63
-
-
-#define PAGE_SIZE 4096
-
+    class PT : public PageTable<PT> {};
+}
 
 namespace paging {
     inline size_t GetCR3() {
-        uint64_t cr3_value;
+        size_t cr3_value;
         __asm__ volatile (
             "mov %%cr3, %0"
             : "=r" (cr3_value)

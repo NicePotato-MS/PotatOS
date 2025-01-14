@@ -60,9 +60,9 @@ void bumpGetNextRegion() {
             case MEMMAP_USABLE:
             case MEMMAP_BOOTLOADER:
             case MEMMAP_ACPI_RECLAIMABLE:
-                bump_head = memory::PhysicalAddressToVirtual((entry->base + 0xFFF) & ~0xFFF) - PAGE_SIZE;
-                bump_end = memory::PhysicalAddressToVirtual((entry->base + entry->length) & ~0xFFF) - PAGE_SIZE;
-                if (bump_end - bump_head >= PAGE_SIZE) {
+                bump_head = memory::PhysicalAddressToVirtual((entry->base + 0xFFF) & ~0xFFF) - page::SIZE;
+                bump_end = memory::PhysicalAddressToVirtual((entry->base + entry->length) & ~0xFFF) - page::SIZE;
+                if (bump_end - bump_head >= page::SIZE) {
                     bump_memmap_entry++;
                     return;
                 }
@@ -78,7 +78,7 @@ size_t balloc() {
         bumpGetNextRegion();
     }
 
-    bump_head += PAGE_SIZE;
+    bump_head += page::SIZE;
     return bump_head;
 }
 

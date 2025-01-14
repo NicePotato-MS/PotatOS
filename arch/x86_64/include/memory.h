@@ -14,11 +14,11 @@ namespace memory {
 
     extern size_t hhdm;
 
-    inline static size_t PhysicalAddressToVirtual(size_t address) {
+    inline size_t PhysicalAddressToVirtual(size_t address) {
         return address + memory::hhdm;
     }
 
-    inline static size_t VirtualAddressToPhysical(size_t address) {
+    inline size_t VirtualAddressToPhysical(size_t address) {
         return address - memory::hhdm;
     }
 
