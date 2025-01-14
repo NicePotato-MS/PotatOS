@@ -47,11 +47,6 @@ const char *memory::memmap_type[] = {
     "Framebuffer"
 };
 
-size_t memory::PhysicalAddressToVirtual(size_t address) {
-    return address + memory::hhdm;
-}
-
-
 size_t bump_head = 0;
 size_t bump_end = 0;
 size_t bump_memmap_entry = 0;
