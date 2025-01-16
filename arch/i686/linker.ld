@@ -3,7 +3,7 @@ OUTPUT_FORMAT(elf32-i386)
 OUTPUT_ARCH(i386)
 
 /* We want the symbol _start to be our entry point */
-ENTRY(_kmain)
+ENTRY(_start)
 
 /* Define the program headers we want so the bootloader gives us the right */
 /* MMU permissions */

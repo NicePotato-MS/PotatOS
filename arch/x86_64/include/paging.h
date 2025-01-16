@@ -130,10 +130,10 @@ namespace page_table {
         EntryType* entries;
 
         template <typename Address>
-        inline constexpr PageTable(Address address) : entries(reinterpret_cast<EntryType*>(address)) {}
+        inline PageTable(Address address) : entries(reinterpret_cast<EntryType*>(address)) {}
         
-        inline constexpr EntryType& operator[](size_t index) { return entries[index]; }
-        inline constexpr const EntryType& operator[](size_t index) const { return entries[index]; }
+        inline EntryType& operator[](size_t index) { return entries[index]; }
+        inline const EntryType& operator[](size_t index) const { return entries[index]; }
     };
 
     class L4 : public PageTable<L4Entry> {
@@ -195,7 +195,7 @@ namespace page_table {
 }
 
 namespace paging {
-    extern page_table::L4 KernelL4;
+    extern page_table::L4 kernelL4;
 
     inline size_t GetCR3() {
         size_t cr3_value;
