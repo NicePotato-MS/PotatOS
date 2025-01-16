@@ -73,7 +73,7 @@ void bumpGetNextRegion() {
     krnl::Panic(KERNEL_PANIC_OUT_OF_MEMORY);
 }
 
-size_t balloc() {
+size_t memory::balloc() {
     if (bump_head == bump_end) {
         bumpGetNextRegion();
     }
@@ -88,7 +88,7 @@ size_t freelist_end = 0;
 
 size_t palloc() {
     if (!freelist_head) {
-        return balloc();
+        return memory::balloc();
     }
 
     if (freelist_head == freelist_end) {

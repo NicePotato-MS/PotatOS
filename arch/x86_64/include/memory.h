@@ -5,6 +5,7 @@
 #include <types.h>
 
 #include <limine.h>
+
 namespace memory {
     extern const char *memmap_type[];
     
@@ -14,13 +15,16 @@ namespace memory {
 
     extern size_t hhdm;
 
-    inline size_t PhysicalAddressToVirtual(size_t address) {
-        return address + memory::hhdm;
+    template <typename Address>
+    inline size_t PhysicalAddressToVirtual(Address address) {
+        return reinterpret_cast<size_t>(address) + memory::hhdm;
     }
 
-    inline size_t VirtualAddressToPhysical(size_t address) {
-        return address - memory::hhdm;
+    template <typename Address>
+    inline size_t VirtualAddressToPhysical(Address address) {
+        return reinterpret_cast<size_t>(address) - memory::hhdm;
     }
 
+    size_t balloc();
     void Init();
 }
