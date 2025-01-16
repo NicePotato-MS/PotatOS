@@ -12,13 +12,14 @@
 #include <ps2.h>
 
 #include <fonts/dina_7x16.h>
+#include "errorcodes.h"
 
 LIMINE_BASE_REVISION(3);
 
 
 extern "C" void _kmain() {
     if (!LIMINE_BASE_REVISION_SUPPORTED) {
-        krnl::Panic(KERNEL_PANIC_BOOTLOADER_UNSUPPORTED);
+        krnl::Panic(errorcode::misc::BOOTLOADER_UNSUPPORTED);
     }
 
     arch::Setup();

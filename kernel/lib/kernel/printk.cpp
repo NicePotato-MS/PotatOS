@@ -57,55 +57,55 @@ void krnl::Printf(const char *str, ...) {
 }
 
 void krnl::Printf_ok(const char *str, ...) {
-    krnl::Printf("%s[   OK] ", ANSI_BRIGHT_GREEN); // this
+    krnl::Printf("%s[   OK] ", ansi::fg::bright_green); // this
     va_list va;
     va_start(va, str);
     krnl::Printf(str, va);
     va_end(va);
-    krnl::Printf("%s\n", ANSI_RESET); // this
+    krnl::Printf("%s\n", ansi::reset); // this
 }
 
 void krnl::Printf_fail(const char *str, ...) {
-    krnl::Printf("%s[ FAIL] ", ANSI_BRIGHT_RED);
+    krnl::Printf("%s[ FAIL] ", ansi::fg::bright_red);
     va_list va;
     va_start(va, str);
     krnl::Printf(str, va);
     va_end(va);
-    krnl::Printf("%s\n", ANSI_RESET);
+    krnl::Printf("%s\n", ansi::reset);
 }
 
 void krnl::Printf_info(const char *str, ...) {
-    krnl::Printf("%s[ INFO] ", ANSI_BRIGHT_CYAN);
+    krnl::Printf("%s[ INFO] ", ansi::fg::bright_cyan);
     va_list va;
     va_start(va, str);
     krnl::Printf(str, va);
     va_end(va);
-    krnl::Printf("%s\n", ANSI_RESET);
+    krnl::Printf("%s\n", ansi::reset);
 }
 
 void krnl::Printf_warn(const char *str, ...) {
-    krnl::Printf("%s%s[ WARN] ", ANSI_YELLOW, ANSI_BOLD);
+    krnl::Printf("%s%s[ WARN] ", ansi::fg::yellow, ansi::bold);
     va_list va;
     va_start(va, str);
     krnl::Printf(str, va);
     va_end(va);
-    krnl::Printf("%s\n", ANSI_RESET);
+    krnl::Printf("%s\n", ansi::reset);
 }
 
 void krnl::Printf_error(const char *str, ...) {
-    krnl::Printf("%s%s[ERROR] ", ANSI_RED, ANSI_BOLD);
+    krnl::Printf("%s%s[ERROR] ", ansi::fg::red, ansi::bold);
     va_list va;
     va_start(va, str);
     krnl::Printf(str, va);
     va_end(va);
-    krnl::Printf("%s\n", ANSI_RESET);
+    krnl::Printf("%s\n", ansi::reset);
 }
 
 void krnl::Printf_panic(const char *str, ...) {
-    krnl::Printf("%s%s%s[PANIC] ", ANSI_BG_BRIGHT_RED, ANSI_BLACK, ANSI_BOLD);
+    krnl::Printf("%s%s%s[PANIC] ", ansi::bg::bright_red, ansi::fg::black, ansi::bold);
     va_list va;
     va_start(va, str);
     krnl::Printf(str, va);
     va_end(va);
-    krnl::Printf("%s\n", ANSI_RESET);
+    krnl::Printf("%s\n", ansi::reset);
 }

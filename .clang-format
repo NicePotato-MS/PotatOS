@@ -17,3 +17,4 @@ AllowShortFunctionsOnASingleLine: All
 BreakBeforeTernaryOperators: false
 BreakStringLiterals: false
 BreakBeforeBinaryOperators: None
+NamespaceIndentation: All

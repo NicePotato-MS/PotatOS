@@ -6,6 +6,7 @@
 #include <kernel.h>
 #include <gdt.h>
 #include <segment.h>
+#include "errorcodes.h"
 
 
 idt::isr_entry idt::array[256];
@@ -17,32 +18,32 @@ struct {
 
 __attribute__((interrupt)) static void default_handler(void* ptr) {
     krnl::Printf_error("Unhandled Interrupt at %p", ptr);
-    krnl::Panic(KERNEL_PANIC_UNHANDLED_INTERRUPT);
+    krnl::Panic(errorcode::interrupt::UNHANDLED);
 }
 
 __attribute__((interrupt)) static void division_error_handler(void* ptr) {
     krnl::Printf_error("Division by Zero at %p", ptr);
-    krnl::Panic(KERNEL_PANIC_DIVISION_BY_ZERO);
+    krnl::Panic(errorcode::math::DIVISION_BY_ZERO);
 }
 
 __attribute__((interrupt)) static void invalid_opcode_handler(void* ptr) {
-    krnl::Printf_error("Division by Zero at %p", ptr);
-    krnl::Panic(KERNEL_PANIC_DIVISION_BY_ZERO);
+    krnl::Printf_error("Invalid Opcode at %p", ptr);
+    krnl::Panic(errorcode::execution::INVALID_OPCODE);
 }
 
 __attribute__((interrupt)) static void stack_segment_fault_handler(void* ptr) {
     krnl::Printf_error("Segmentation Fault at %p", ptr);
-    krnl::Panic(KERNEL_PANIC_SEGMENTATION_FAULT);
+    krnl::Panic(errorcode::memory::SEGMENTATION_FAULT);
 }
 
 __attribute__((interrupt)) static void general_protection_handler(void* ptr) {
     krnl::Printf_error("General Protection Fault at %p", ptr);
-    krnl::Panic(KERNEL_PANIC_GENERAL_PROTECTION_UNHANDLED);
+    krnl::Panic(errorcode::interrupt::GENERAL_PROTECTION_FAULT);
 }
 
 __attribute__((interrupt)) static void page_fault_handler(void* ptr) {
     krnl::Printf_error("Page Fault at %p", ptr);
-    krnl::Panic(KERNEL_PANIC_PAGE_FAULT);
+    krnl::Panic(errorcode::memory::PAGE_FAULT);
 }
 
 __attribute__((interrupt)) static void general_handler(void* ptr) {

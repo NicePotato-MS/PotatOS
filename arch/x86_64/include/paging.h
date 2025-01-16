@@ -21,15 +21,17 @@ namespace page {
 namespace page_table {
     enum {
         ENTRY_COUNT = 512,
-        ADDRESS_MASK = 0xFFFFFFFFFFFFF000
+        ADDRESS_MASK = 0xFFFFFFFFFFFFF000,
+        CANONICAL_MASK = 0x0000FFFFFFFFFFFF,
+        INDEX_MASK = 0x1FF
     };
     namespace shift {
         enum {
             PRESENT = 0,
             READ_WRITE = 1,
             PRIVELEGE = 2,
-            WRITE_THROUGH = 3,
-            CACHE_DISABLE = 4,
+            WRITE_MODE = 3,
+            CACHE_MODE = 4,
             ACCESSED = 5,
 
             SIZE = 7,
@@ -38,7 +40,40 @@ namespace page_table {
             PAT = 7,
             GLOBAL = 8
         };
+
+        enum {
+            L4Index = 12 + 27,
+            L3Index = 12 + 18,
+            L2Index = 12 + 9,
+            L1Index = 12
+        };
     }
+
+    namespace flag {
+        enum {
+            PRESENT = 1 >> shift::PRESENT,
+
+            READ_WRITE = 1 >> shift::READ_WRITE,
+            READ_ONLY = 0 >> shift::READ_WRITE,
+
+            PRIVELEGE_ALL = 1 >> shift::PRIVELEGE,
+            PRIVELEGE_KERNEL = 0 >> shift::PRIVELEGE,
+
+            WRITE_THROUGH = 1 >> shift::WRITE_MODE,
+            WRITE_BACK = 0 >> shift::WRITE_MODE,
+
+            CACHE_DISABLE = 1 >> shift::CACHE_MODE,
+            CACHE_ENABLE = 0 >> shift::CACHE_MODE,
+
+            SIZE_4MB = 1 >> shift::SIZE,
+            SIZE_4KB = 0 >> shift::SIZE,
+        };
+    }
+
+    enum {
+        KERNEL_READ_ONLY = flag::PRESENT | flag::READ_ONLY | flag::PRIVELEGE_KERNEL | flag::WRITE_BACK | flag::CACHE_ENABLE,
+        KERNEL_READ_WRITE = flag::PRESENT | flag::READ_WRITE | flag::PRIVELEGE_KERNEL | flag::WRITE_BACK | flag::CACHE_ENABLE,
+    };
 
     // Forward Declarations
     class L3;
@@ -54,8 +89,8 @@ namespace page_table {
         inline constexpr bool getPresent() const { return (entry >> shift::PRESENT) & 1; }
         inline constexpr bool getReadWrite() const { return (entry >> shift::READ_WRITE) & 1; }
         inline constexpr bool getPrivilege() const { return (entry >> shift::PRIVELEGE) & 1; }
-        inline constexpr bool getWriteMode() const { return (entry >> shift::WRITE_THROUGH) & 1; }
-        inline constexpr bool getCacheMode() const { return (entry >> shift::CACHE_DISABLE) & 1; }
+        inline constexpr bool getWriteMode() const { return (entry >> shift::WRITE_MODE) & 1; }
+        inline constexpr bool getCacheMode() const { return (entry >> shift::CACHE_MODE) & 1; }
         inline constexpr bool getAccessed() const { return (entry >> shift::ACCESSED) & 1; }
 
         inline constexpr size_t getPhysicalAddress() const { return entry & ADDRESS_MASK; }
@@ -134,6 +169,12 @@ namespace page_table {
         
         inline EntryType& operator[](size_t index) { return entries[index]; }
         inline const EntryType& operator[](size_t index) const { return entries[index]; }
+
+        inline void FillEntries(EntryType entry) {
+            for (size_t i = 0; i < ENTRY_COUNT; i++) {
+                entries[i] = entry;
+            }
+        }
     };
 
     class L4 : public PageTable<L4Entry> {
@@ -192,6 +233,72 @@ namespace page_table {
     inline L1 L2Entry::Fetch() {
         return L1(getVirtualAddress());
     }
+
+
+    inline L4 NewL4Bump() {
+        L4 newL4 = L4(memory::balloc());
+        newL4.FillEntries(0);
+        return newL4;
+    }
+
+    inline L3 NewL3Bump() {
+        L3 newL3 = L3(memory::balloc());
+        newL3.FillEntries(0);
+        return newL3;
+    }
+
+    inline L2 NewL2Bump() {
+        L2 newL2 = L2(memory::balloc());
+        newL2.FillEntries(0);
+        return newL2;
+    }
+
+    inline L1 NewL1Bump() {
+        L1 newL1 = L1(memory::balloc());
+        newL1.FillEntries(0);
+        return newL1;
+    }
+
+    inline L4 NewL4() {
+        L4 newL4 = L4(memory::palloc());
+        newL4.FillEntries(0);
+        return newL4;
+    }
+
+    inline L3 NewL3() {
+        L3 newL3 = L3(memory::palloc());
+        newL3.FillEntries(0);
+        return newL3;
+    }
+
+    inline L2 NewL2() {
+        L2 newL2 = L2(memory::palloc());
+        newL2.FillEntries(0);
+        return newL2;
+    }
+
+    inline L1 NewL1() {
+        L1 newL1 = L1(memory::palloc());
+        newL1.FillEntries(0);
+        return newL1;
+    }
+
+
+    struct Indexes {
+        size_t L4Index;
+        size_t L3Index;
+        size_t L2Index;
+        size_t L1Index;
+    };
+
+    inline Indexes GetIndexes(size_t virtualAddress) {
+        virtualAddress &= CANONICAL_MASK;
+        size_t L4Index = (virtualAddress >> shift::L4Index) & INDEX_MASK;
+        size_t L3Index = (virtualAddress >> shift::L3Index) & INDEX_MASK;
+        size_t L2Index = (virtualAddress >> shift::L2Index) & INDEX_MASK;
+        size_t L1Index = (virtualAddress >> shift::L1Index) & INDEX_MASK;
+        return {L4Index, L3Index, L2Index, L1Index};
+    }
 }
 
 namespace paging {
@@ -218,5 +325,8 @@ namespace paging {
         );
     }
 
+    template <typename Address>
+    void MapPagesBump(page_table::L4 L4, Address virtualAddress, Address physicalAddress);
+    
     void Init();
 }

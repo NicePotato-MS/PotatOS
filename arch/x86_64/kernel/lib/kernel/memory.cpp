@@ -9,6 +9,7 @@
 #include <limine.h>
 #include <memory.h>
 #include <paging.h>
+#include <errorcodes.h>
 
 volatile struct limine_memmap_request memmap_request = {
     .id = LIMINE_MEMMAP_REQUEST,
@@ -47,6 +48,15 @@ const char *memory::memmap_type[] = {
     "Framebuffer"
 };
 
+
+size_t memory::freelist_head = 0;
+size_t memory::freelist_end = 0;
+
+void memory::OutOfMemory() {
+    krnl::Panic(errorcode::memory::OUT_OF_PHYSICAL_MEMORY);
+}
+
+
 size_t bump_head = 0;
 size_t bump_end = 0;
 size_t bump_memmap_entry = 0;
@@ -69,8 +79,6 @@ void bumpGetNextRegion() {
         }
         bump_memmap_entry++;
     }
-
-    krnl::Panic(KERNEL_PANIC_OUT_OF_MEMORY);
 }
 
 size_t memory::balloc() {
@@ -82,40 +90,10 @@ size_t memory::balloc() {
     return bump_head;
 }
 
-
-size_t freelist_head = 0;
-size_t freelist_end = 0;
-
-size_t palloc() {
-    if (!freelist_head) {
-        return memory::balloc();
-    }
-
-    if (freelist_head == freelist_end) {
-        freelist_head = 0;
-        return freelist_end;
-    } else {
-        size_t free_page = freelist_head;
-        freelist_head = *(size_t*)freelist_head;
-        return free_page;
-    }
-}
-
-template <typename T>
-void pfree(T address) {
-    if (freelist_head != 0) {
-        *(T*)freelist_end = address;
-        freelist_end = reinterpret_cast<size_t>(address);
-    } else {
-        freelist_head = reinterpret_cast<size_t>(address);
-        freelist_end = reinterpret_cast<size_t>(address);
-    }
-}
-
 void memory::Init() {
     if (!memmap_request.response) {
         krnl::Printf_error("No Memory Map!");
-        krnl::Panic(KERNEL_PANIC_BOOTLOADER_NO_MEMMAP);
+        krnl::Panic(errorcode::memory::NO_MEMMAP);
     }
 
     memory::memmap = memmap_request.response;

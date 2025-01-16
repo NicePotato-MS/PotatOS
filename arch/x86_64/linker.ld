@@ -41,6 +41,7 @@ SECTIONS
         *(.bss .bss.*)
         *(COMMON)
     } :data
+    linker_kernelEnd = .;
 
     /DISCARD/ : {
         *(.eh_frame)
