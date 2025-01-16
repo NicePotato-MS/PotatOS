@@ -41,9 +41,9 @@ namespace page_table {
     }
 
     // Forward Declarations
-    class PDPT;
-    class PD;
-    class PT;
+    class L3;
+    class L2;
+    class L1;
 
 
     class PageTableEntry {
@@ -72,46 +72,46 @@ namespace page_table {
         }
     };
 
-    class PML4Entry : public PageTableEntry {
+    class L4Entry : public PageTableEntry {
        public:
-        inline constexpr PML4Entry(size_t value) : PageTableEntry(value) {}
+        inline constexpr L4Entry(size_t value) : PageTableEntry(value) {}
         void Print() const {
-            krnl::Printf_info("PML4 Entry");
+            krnl::Printf_info("L4 Entry");
             PrintBase();
         }
 
-        inline PDPT Fetch();
+        inline L3 Fetch();
     };
 
-    class PDPTEntry : public PageTableEntry {
+    class L3Entry : public PageTableEntry {
        public:
-        inline constexpr PDPTEntry(size_t value) : PageTableEntry(value) {}
+        inline constexpr L3Entry(size_t value) : PageTableEntry(value) {}
         inline bool getAccessed() const { return (entry >> shift::ACCESSED) & 1; }
 
         void Print() const {
-            krnl::Printf_info("PDPT Entry");
+            krnl::Printf_info("L3 Entry");
             PrintBase();
         }
 
-        inline PD Fetch();
+        inline L2 Fetch();
     };
 
-    class PDEntry : public PageTableEntry {
+    class L2Entry : public PageTableEntry {
        public:
-        inline constexpr PDEntry(size_t value) : PageTableEntry(value) {}
+        inline constexpr L2Entry(size_t value) : PageTableEntry(value) {}
         void Print() const {
-            krnl::Printf_info("PD Entry");
+            krnl::Printf_info("L2 Entry");
             PrintBase();
         }
 
-        inline PT Fetch();
+        inline L1 Fetch();
     };
 
-    class PTEntry : public PageTableEntry {
+    class L1Entry : public PageTableEntry {
        public:
-        inline constexpr PTEntry(size_t value) : PageTableEntry(value) {}
+        inline constexpr L1Entry(size_t value) : PageTableEntry(value) {}
         void Print() const {
-            krnl::Printf_info("PT Entry");
+            krnl::Printf_info("L1 Entry");
             PrintBase();
         }
     };
@@ -136,66 +136,66 @@ namespace page_table {
         inline constexpr const EntryType& operator[](size_t index) const { return entries[index]; }
     };
 
-    class PML4 : public PageTable<PML4Entry> {
+    class L4 : public PageTable<L4Entry> {
        public:
         template <typename Address>
-        inline constexpr PML4(Address address) : PageTable(address) {}
+        inline constexpr L4(Address address) : PageTable(address) {}
 
         template <typename Address>
-        inline PML4 CopyTo(Address address) {
+        inline L4 CopyTo(Address address) {
             return BaseCopyTo(address);
         }
     };
 
-    class PDPT : public PageTable<PDPTEntry> {
+    class L3 : public PageTable<L3Entry> {
        public:
         template <typename Address>
-        inline constexpr PDPT(Address address) : PageTable(address) {}
+        inline constexpr L3(Address address) : PageTable(address) {}
 
         template <typename Address>
-        inline PDPT CopyTo(Address address) {
+        inline L3 CopyTo(Address address) {
             return BaseCopyTo(address);
         }
     };
 
-    class PD : public PageTable<PDEntry> {
+    class L2 : public PageTable<L2Entry> {
        public:
         template <typename Address>
-        inline constexpr PD(Address address) : PageTable(address) {}
+        inline constexpr L2(Address address) : PageTable(address) {}
 
         template <typename Address>
-        inline PD CopyTo(Address address) {
+        inline L2 CopyTo(Address address) {
             return BaseCopyTo(address);
         }
     };
 
-    class PT : public PageTable<PTEntry> {
+    class L1 : public PageTable<L1Entry> {
        public:
         template <typename Address>
-        inline constexpr PT(Address address) : PageTable(address) {}
+        inline constexpr L1(Address address) : PageTable(address) {}
 
         template <typename Address>
-        inline PT CopyTo(Address address) {
+        inline L1 CopyTo(Address address) {
             return BaseCopyTo(address);
         }
     };
 
 
-    inline PDPT PML4Entry::Fetch() {
-        return PDPT(getVirtualAddress());
+    inline L3 L4Entry::Fetch() {
+        return L3(getVirtualAddress());
     }
 
-    inline PD PDPTEntry::Fetch() {
-        return PD(getVirtualAddress());
+    inline L2 L3Entry::Fetch() {
+        return L2(getVirtualAddress());
     }
 
-    inline PT PDEntry::Fetch() {
-        return PT(getVirtualAddress());
+    inline L1 L2Entry::Fetch() {
+        return L1(getVirtualAddress());
     }
 }
 
 namespace paging {
-    extern page_table::PML4 KernelPML4;
+    extern page_table::L4 KernelL4;
 
     inline size_t GetCR3() {
         size_t cr3_value;
